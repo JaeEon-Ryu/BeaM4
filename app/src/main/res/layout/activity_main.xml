@@ -96,13 +96,13 @@
                 android:id="@+id/tab_trashCan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/sort_by_time"/>
+                android:icon="@drawable/trash_can"/>
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/trash_can"/>
+                android:icon="@drawable/setting"/>
 
         </com.google.android.material.tabs.TabLayout>
 
