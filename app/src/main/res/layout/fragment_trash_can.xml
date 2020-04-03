@@ -4,7 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TrashCanFragment">
+    tools:context=".TrashCanFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_trash"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.22" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:layout_weight="1.48"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.3"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view_trash"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/colorWhite"
+        android:layout_below="@+id/layout_trash"/>
+
 
     <TextView
         android:layout_width="match_parent"
@@ -14,5 +55,6 @@
         android:gravity="center"
         android:textColor="@color/colorWhite"
         />
+
 
 </LinearLayout>
