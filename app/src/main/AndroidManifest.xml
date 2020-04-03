@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".SelectPhotoActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".SettingFragment" />
         <activity android:name=".TrashCanFragment" />
         <activity android:name=".SortByImageFragment" />
@@ -21,6 +22,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
