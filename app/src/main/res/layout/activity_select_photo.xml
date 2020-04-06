@@ -72,6 +72,7 @@
         android:layout_alignTop="@id/bigImage"/>
 
     <LinearLayout
+        android:id="@+id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/bigImage"
@@ -82,18 +83,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
-            android:text="즐겨찾기 제외하고 모두 삭제"
             android:padding="10dp"
+            android:text="즐겨찾기 제외하고 모두 삭제"
             android:textSize="10pt" />
 
         <Button
             android:id="@+id/btn_recommend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="사진 추천"
             android:padding="10dp"
+            android:text="사진 추천"
             android:textSize="10pt" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/button_bar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/select_photo_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
     </LinearLayout>
 
 </RelativeLayout>

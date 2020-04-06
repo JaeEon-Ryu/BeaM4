@@ -2,18 +2,12 @@ package com.example.beam4;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import android.app.Activity;
-import android.widget.ArrayAdapter;
+
 import android.widget.GridView;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.text.NoCopySpan;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +39,7 @@ public class TrashCanFragment extends Fragment {
         // 해시 맵 객체에 데이터를 저장할 때 사용한 이름
         String key = "image";
         // 데이터를 셋팅할 뷰의 아이디
-        int id = R.id.imageView;
+        int id = R.id.samplePhoto;
         // 어댑터 생성
         // ArrayAdapter imageGridAdapter = new ArrayAdapter(this., data_list, R.layout.activity_trash_can_row, key, id);
         //gridViewImages.setAdapter(imageGridAdapter);

@@ -72,8 +72,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:max="6"
-            android:progress="3"
+            android:max="4"
+            android:progress="2"
             android:scrollbarStyle="outsideInset" />
 
         <LinearLayout
