@@ -3,6 +3,8 @@ package com.example.beam4;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +18,7 @@ public class SelectPhotoActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ArrayList<Integer> photoGroup = new ArrayList<>();
+    private ImageView bigImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,14 @@ public class SelectPhotoActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.select_photo_group);
         recyclerView.setLayoutManager(linearLayoutManager);
         SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(photoGroup);
+
+        adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                bigImage.setImageResource(photoGroup.get(position));
+            }
+        });
+
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new SelectPhotoActivityRowDecoration(25,25,30,30));
     }
