@@ -29,6 +29,8 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
     private CheckBox checkButton;
     private Button deleteExceptBM;
     private ArrayList<Integer> selectedPhotoGroup = new ArrayList<>();
+    private ArrayList<Boolean> checkedPhotoList = new ArrayList<>();
+    private int whatPhotoPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +45,16 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
          */
 
         photoGroup.clear();
-        int  [] photoId = {
+        int [] photoId = {
                 R.drawable.sample1, R.drawable.sample2, R.drawable.sample3, R.drawable.sample4
         };
 
         for (int i = 0; i < photoId.length; i++) {
             photoGroup.add(photoId[i]);
+        }
+
+        for (int i = 0; i < photoId.length; i++) {
+            checkedPhotoList.add(false);
         }
 
         bigImage = findViewById(R.id.bigImage);
@@ -62,7 +68,9 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
+                whatPhotoPosition = position;
                 bigImage.setImageResource(photoGroup.get(position));
+                checkButton.setChecked(checkedPhotoList.get(position));
             }
         });
 
@@ -80,6 +88,11 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
             @Override
             public void onClick(View v) {
                 if(selectedPhotoGroup.size() != 0){
+                    for (int i = 0; i < photoGroup.size(); i++) {
+                        if(checkedPhotoList.get(i) == true){
+                            selectedPhotoGroup.add(photoGroup.get(i));
+                        }
+                    }
                     Fragment fragment = new TrashCanFragment();
                     Bundle bundle = new Bundle();
                     bundle.putIntegerArrayList("photoGroup", selectedPhotoGroup);
@@ -91,14 +104,10 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(checkButton.isChecked()){
-            if(selectedPhotoGroup.contains(bigImage.getId()) == false){
-                selectedPhotoGroup.add(bigImage.getId());
-            }
+        if(isChecked){
+            checkedPhotoList.set(whatPhotoPosition, true);
         }else{
-            if(selectedPhotoGroup.contains(bigImage.getId()) == true){
-                selectedPhotoGroup.remove(selectedPhotoGroup.indexOf(bigImage.getId()));
-            }
+            checkedPhotoList.set(whatPhotoPosition, false);
         }
     }
 
