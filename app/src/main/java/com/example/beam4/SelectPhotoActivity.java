@@ -69,10 +69,10 @@ public class SelectPhotoActivity extends AppCompatActivity {
         checkButton = findViewById(R.id.checkButton);
         checkButton.setOnClickListener(checkButtonClickListener);
 
-//        // deleteExceptBM
-//        DeleteExceptBMListener deleteExceptBMListener =  new DeleteExceptBMListener()
-//        deleteExceptBM = findViewById(R.id.deleteExceptBM);
-//        deleteExceptBM.setOnClickListener(deleteExceptBMListener);
+        // deleteExceptBM
+        DeleteExceptBMListener deleteExceptBMListener =  new DeleteExceptBMListener();
+        deleteExceptBM = findViewById(R.id.deleteExceptBM);
+        deleteExceptBM.setOnClickListener(deleteExceptBMListener);
     }
 
     class CheckButtonClickListener implements Button.OnClickListener{
@@ -83,12 +83,12 @@ public class SelectPhotoActivity extends AppCompatActivity {
         }
     }
 
-//    class DeleteExceptBMListener implements Button.OnClickListener{
-//
-//        @Override
-//        public void onClick(View v) {
-//            sendBroadcast();
-//        }
-//    }
+    class DeleteExceptBMListener implements Button.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            selectedPhotoGroup.add(bigImage.getId());
+        }
+    }
 }
 
