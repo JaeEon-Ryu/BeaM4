@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.sql.Array;
 import java.util.ArrayList;
 
-public class SelectPhotoActivity extends AppCompatActivity {
+public class SelectPhotoActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     private Toolbar toolbar;
     private ArrayList<Integer> photoGroup = new ArrayList<>();
@@ -27,14 +29,18 @@ public class SelectPhotoActivity extends AppCompatActivity {
     private CheckBox checkButton;
     private Button deleteExceptBM;
     private ArrayList<Integer> selectedPhotoGroup = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_photo);
 
-        checkButton = (CheckBox)findViewById(R.id.checkButton);
-        checkButton.setOnClickListener();
+        /*
+        toolbar=findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+         */
 
         photoGroup.clear();
         int  [] photoId = {
@@ -64,9 +70,8 @@ public class SelectPhotoActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new SelectPhotoActivityRowDecoration(25,25,30,30));
 
         // checkButtonClick
-        CheckButtonClickListener checkButtonClickListener = new CheckButtonClickListener();
         checkButton = findViewById(R.id.checkButton);
-        checkButton.setOnClickListener(checkButtonClickListener);
+        checkButton.setOnCheckedChangeListener(this);
 
         // trashcan으로 전송
         deleteExceptBM = findViewById(R.id.deleteExceptBM);
@@ -84,17 +89,18 @@ public class SelectPhotoActivity extends AppCompatActivity {
         });
     }
 
-
-    class CheckButtonClickListener implements Button.OnClickListener{
-
-        @Override
-        public void onClick(View v) {
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(checkButton.isChecked()){
             if(selectedPhotoGroup.contains(bigImage.getId()) == false){
                 selectedPhotoGroup.add(bigImage.getId());
             }
+        }else{
+            if(selectedPhotoGroup.contains(bigImage.getId()) == true){
+                selectedPhotoGroup.remove(selectedPhotoGroup.indexOf(bigImage.getId()));
+            }
         }
     }
-
 
 }
 
