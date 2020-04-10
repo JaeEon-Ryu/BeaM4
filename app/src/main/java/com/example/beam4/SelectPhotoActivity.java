@@ -2,6 +2,7 @@ package com.example.beam4;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -69,11 +70,18 @@ public class SelectPhotoActivity extends AppCompatActivity {
         checkButton = findViewById(R.id.checkButton);
         checkButton.setOnClickListener(checkButtonClickListener);
 
-        // deleteExceptBM
-        DeleteExceptBMListener deleteExceptBMListener =  new DeleteExceptBMListener();
-        deleteExceptBM = findViewById(R.id.deleteExceptBM);
-        deleteExceptBM.setOnClickListener(deleteExceptBMListener);
+        // trashcan으로 전송
+        deleteExceptBM.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TrashCanFragment.class);
+                intent.putIntegerArrayListExtra("selectedPhotoGroup", selectedPhotoGroup);
+                startActivity(intent);
+            }
+        });
     }
+
 
     class CheckButtonClickListener implements Button.OnClickListener{
 
@@ -83,12 +91,6 @@ public class SelectPhotoActivity extends AppCompatActivity {
         }
     }
 
-    class DeleteExceptBMListener implements Button.OnClickListener{
 
-        @Override
-        public void onClick(View v) {
-            selectedPhotoGroup.add(bigImage.getId());
-        }
-    }
 }
 
