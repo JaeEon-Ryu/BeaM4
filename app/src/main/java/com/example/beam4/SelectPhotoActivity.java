@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,13 +72,17 @@ public class SelectPhotoActivity extends AppCompatActivity {
         checkButton.setOnClickListener(checkButtonClickListener);
 
         // trashcan으로 전송
+        deleteExceptBM = findViewById(R.id.deleteExceptBM);
         deleteExceptBM.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TrashCanFragment.class);
-                intent.putIntegerArrayListExtra("selectedPhotoGroup", selectedPhotoGroup);
-                startActivity(intent);
+                if(selectedPhotoGroup.size() != 0){
+                    Fragment fragment = new TrashCanFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putIntegerArrayList("photoGroup", selectedPhotoGroup);
+                    fragment.setArguments(bundle);
+                }
             }
         });
     }
@@ -87,7 +92,9 @@ public class SelectPhotoActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            selectedPhotoGroup.add(bigImage.getId());
+            if(selectedPhotoGroup.contains(bigImage.getId()) == false){
+                selectedPhotoGroup.add(bigImage.getId());
+            }
         }
     }
 
