@@ -62,55 +62,6 @@
         android:layout_below="@id/view2"  />
 
 
-    <View
-        android:id="@+id/view3"
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/colorWhite" />
 
-    <!--
-    <LinearLayout
-        android:id="@+id/layout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/mainTabLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_SortByTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/sort_by_time" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_SortByImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/sort_by_image" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_trashCan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/trash_can" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/setting" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-
-    </LinearLayout>
- -->
 
 </RelativeLayout>
