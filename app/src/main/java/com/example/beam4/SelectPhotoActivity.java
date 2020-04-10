@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,21 +24,17 @@ public class SelectPhotoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ArrayList<Integer> photoGroup = new ArrayList<>();
     private ImageView bigImage;
-    private ImageButton checkButton;
+    private CheckBox checkButton;
     private Button deleteExceptBM;
     private ArrayList<Integer> selectedPhotoGroup = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_photo);
 
-        /*
-        toolbar=findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-         */
+        checkButton = (CheckBox)findViewById(R.id.checkButton);
+        checkButton.setOnClickListener();
 
         photoGroup.clear();
         int  [] photoId = {

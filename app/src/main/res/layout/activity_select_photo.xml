@@ -62,12 +62,11 @@
         android:layout_margin="40dp"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <ImageButton
+    <CheckBox
         android:id="@+id/checkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/btn_star_big_off"
-        android:layout_below="@id/view2"
+        android:background="@drawable/bookmarkbtn_change"
         android:layout_alignRight="@id/bigImage"
         android:layout_alignTop="@id/bigImage"/>
 
