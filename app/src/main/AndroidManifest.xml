@@ -9,16 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".SelectPhotoActivity" />
+
         <activity android:name=".MainActivity" />
         <activity android:name=".SettingFragment" />
         <activity android:name=".TrashCanFragment" />
         <activity android:name=".SortByImageFragment" />
         <activity android:name=".SortByTimeFragment" />
         <activity
-            android:name=".SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:name=".SelectPhotoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

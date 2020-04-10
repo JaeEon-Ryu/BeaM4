@@ -63,7 +63,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageButton
-        android:id="@+id/imageButton7"
+        android:id="@+id/checkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/btn_star_big_off"
