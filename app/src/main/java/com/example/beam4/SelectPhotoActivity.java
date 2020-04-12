@@ -46,6 +46,9 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
          */
 
         photoGroup.clear();
+        selectedPhotoGroup.clear();
+        unselectedPhotoGroup.clear();
+
         final int [] photoId = {
                 R.drawable.sample1, R.drawable.sample2, R.drawable.sample3, R.drawable.sample4
         };
@@ -95,10 +98,11 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
                         selectedPhotoGroup.add(photoGroup.get(i));
                     }
                 }
-                Fragment fragment = new TrashCanFragment();
-                Bundle bundle = new Bundle(1);
-                bundle.putIntegerArrayList("unselectedPhotoGroup", unselectedPhotoGroup);
-                fragment.setArguments(bundle);
+                // 데이터베이스로 관리
+//                Fragment fragment = new TrashCanFragment();
+//                Bundle bundle = new Bundle(1);
+//                bundle.putIntegerArrayList("unselectedPhotoGroup", unselectedPhotoGroup);
+//                fragment.setArguments(bundle);
 
                 photoGroup.clear();
                 checkedPhotoList.clear();
