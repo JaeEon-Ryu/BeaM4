@@ -48,13 +48,14 @@
         android:layout_below="@+id/layout_SBT"/>
 
 
-    <TextView
+
+    <ListView
+        android:id="@+id/list_view_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="30dp"
-        android:text="첫번째화면"
-        android:gravity="center"
-        android:textColor="@color/colorWhite"
+        android:layout_marginVertical="10dp"
         />
+
+
 
 </LinearLayout>
