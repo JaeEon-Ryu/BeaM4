@@ -35,6 +35,11 @@ public class TrashCanFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // 상진수 추가 입력, SelectPhotoActivity에서 선택된 포토 리스트 전송
+        ArrayList<Integer> unselectedPhotoGroup = getArguments().getIntegerArrayList("unselectedPhotoGroup");
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_trash_can, null);
 

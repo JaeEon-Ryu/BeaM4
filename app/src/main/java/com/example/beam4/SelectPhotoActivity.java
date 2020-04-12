@@ -28,6 +28,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
     private ImageView bigImage;
     private CheckBox checkButton;
     private Button deleteExceptBM;
+    private ArrayList<Integer> unselectedPhotoGroup = new ArrayList<>();
     private ArrayList<Integer> selectedPhotoGroup = new ArrayList<>();
     private ArrayList<Boolean> checkedPhotoList = new ArrayList<>();
     private int whatPhotoPosition;
@@ -45,7 +46,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
          */
 
         photoGroup.clear();
-        int [] photoId = {
+        final int [] photoId = {
                 R.drawable.sample1, R.drawable.sample2, R.drawable.sample3, R.drawable.sample4
         };
 
@@ -61,9 +62,9 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         bigImage.setImageResource(photoGroup.get(0));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.select_photo_group);
+        final RecyclerView recyclerView = (RecyclerView)findViewById(R.id.select_photo_group);
         recyclerView.setLayoutManager(linearLayoutManager);
-        SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(photoGroup);
+        final SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(photoGroup);
 
         adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
             @Override
@@ -87,17 +88,40 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
 
             @Override
             public void onClick(View v) {
-                if(selectedPhotoGroup.size() != 0){
-                    for (int i = 0; i < photoGroup.size(); i++) {
-                        if(checkedPhotoList.get(i) == true){
-                            selectedPhotoGroup.add(photoGroup.get(i));
-                        }
+                for (int i = 0; i < photoGroup.size(); i++) {
+                    if(checkedPhotoList.get(i) == false){
+                        unselectedPhotoGroup.add(photoGroup.get(i));
+                    } else{
+                        selectedPhotoGroup.add(photoGroup.get(i));
                     }
-                    Fragment fragment = new TrashCanFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putIntegerArrayList("photoGroup", selectedPhotoGroup);
-                    fragment.setArguments(bundle);
                 }
+                Fragment fragment = new TrashCanFragment();
+                Bundle bundle = new Bundle(1);
+                bundle.putIntegerArrayList("unselectedPhotoGroup", unselectedPhotoGroup);
+                fragment.setArguments(bundle);
+
+                photoGroup.clear();
+                checkedPhotoList.clear();
+                for (int i = 0; i < selectedPhotoGroup.size(); i++) {
+                    photoGroup.add(selectedPhotoGroup.get(i));
+                }
+                for (int i = 0; i < selectedPhotoGroup.size(); i++) {
+                    checkedPhotoList.add(false);
+                }
+                selectedPhotoGroup.clear();
+                unselectedPhotoGroup.clear();
+
+                bigImage.setImageResource(photoGroup.get(0));
+                SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(photoGroup);
+                adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        whatPhotoPosition = position;
+                        bigImage.setImageResource(photoGroup.get(position));
+                        checkButton.setChecked(checkedPhotoList.get(position));
+                    }
+                });
+                recyclerView.setAdapter(adapter);
             }
         });
     }
