@@ -3,7 +3,11 @@ package com.example.beam4;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,18 +22,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
 
 public class SelectPhotoActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private Toolbar toolbar;
-    private ArrayList<Integer> photoGroup = new ArrayList<>();
+    private ArrayList<String> photoGroup = new ArrayList<>();
     private ImageView bigImage;
     private CheckBox checkButton;
     private Button deleteExceptBM;
-    private ArrayList<Integer> unselectedPhotoGroup = new ArrayList<>();
-    private ArrayList<Integer> selectedPhotoGroup = new ArrayList<>();
+    private ArrayList<String> unselectedPhotoGroup = new ArrayList<>();
+    private ArrayList<String> selectedPhotoGroup = new ArrayList<>();
     private ArrayList<Boolean> checkedPhotoList = new ArrayList<>();
     private int whatPhotoPosition;
     @Override
@@ -37,43 +41,33 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_photo);
 
-        /*
-        toolbar=findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-         */
-
         photoGroup.clear();
         selectedPhotoGroup.clear();
         unselectedPhotoGroup.clear();
 
-        final int [] photoId = {
-                R.drawable.sample1, R.drawable.sample2, R.drawable.sample3, R.drawable.sample4
-        };
-
-        for (int i = 0; i < photoId.length; i++) {
-            photoGroup.add(photoId[i]);
+        for (int i = 0; i < 20; i++) {
+            photoGroup.add(photoFileClass.photoFileArrayList.get(i));
         }
 
-        for (int i = 0; i < photoId.length; i++) {
+        for (int i = 0; i < 20; i++) {
             checkedPhotoList.add(false);
         }
 
         bigImage = findViewById(R.id.bigImage);
-        bigImage.setImageResource(photoGroup.get(0));
+        bigImage.setAdjustViewBounds(true);
+        setBigImage(0);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager.setItemPrefetchEnabled(true);
         final RecyclerView recyclerView = (RecyclerView)findViewById(R.id.select_photo_group);
         recyclerView.setLayoutManager(linearLayoutManager);
-        final SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(photoGroup);
+        final SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(this, photoGroup);
 
         adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 whatPhotoPosition = position;
-                bigImage.setImageResource(photoGroup.get(position));
+                setBigImage(whatPhotoPosition);
                 checkButton.setChecked(checkedPhotoList.get(position));
             }
         });
@@ -98,11 +92,6 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
                         selectedPhotoGroup.add(photoGroup.get(i));
                     }
                 }
-                // 데이터베이스로 관리
-//                Fragment fragment = new TrashCanFragment();
-//                Bundle bundle = new Bundle(1);
-//                bundle.putIntegerArrayList("unselectedPhotoGroup", unselectedPhotoGroup);
-//                fragment.setArguments(bundle);
 
                 photoGroup.clear();
                 checkedPhotoList.clear();
@@ -115,19 +104,21 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
                 selectedPhotoGroup.clear();
                 unselectedPhotoGroup.clear();
 
-                bigImage.setImageResource(photoGroup.get(0));
-                SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(photoGroup);
+                setBigImage(0);
+
+                SelectPhotoActivityRowAdapter adapter = new SelectPhotoActivityRowAdapter(getApplicationContext(), photoGroup);
                 adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
-                        whatPhotoPosition = position;
-                        bigImage.setImageResource(photoGroup.get(position));
+                        setBigImage(position);
                         checkButton.setChecked(checkedPhotoList.get(position));
                     }
                 });
                 recyclerView.setAdapter(adapter);
             }
         });
+
+
     }
 
     @Override
@@ -139,5 +130,26 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         }
     }
 
+    private void setBigImage(int position){
+        Uri uri = Uri.parse("file:///" + photoGroup.get(position));
+        Bitmap bmp = null;
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Matrix matrix = new Matrix();
+        matrix.preRotate(90,0,0);
+        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+        bmp = Bitmap.createScaledBitmap(bmp, 500, 500, false);
+
+        //---------------------------------------------------------------
+
+        // GridView 뷰를 구성할 ImageView 뷰들을 정의합니다.
+        // 뷰에 지정할 이미지는 앞에서 정의한 비트맵 객체입니다.
+        bigImage = findViewById(R.id.bigImage);
+        bigImage.setImageBitmap(bmp);
+    }
 }
 
