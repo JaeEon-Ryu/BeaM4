@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 public class SelectPhotoActivityRowAdapter extends RecyclerView.Adapter<SelectPhotoActivityRowAdapter.ViewHolder> {
     Context context = null;
-    private ArrayList<String> photoIds;
-    SelectPhotoActivityRowAdapter(Context context, ArrayList<String> photoIds){
+    private ArrayList<Uri> photoIds;
+    SelectPhotoActivityRowAdapter(Context context, ArrayList<Uri> photoIds){
         this.context = context;
         this.photoIds = photoIds;
     }
@@ -64,9 +64,8 @@ public class SelectPhotoActivityRowAdapter extends RecyclerView.Adapter<SelectPh
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.photo.setImageURI(Uri.parse("file:///" + photoIds.get(position)));
 
-        Uri uri = Uri.parse("file:///" + photoIds.get(position));
+        Uri uri = photoIds.get(position);
         Bitmap bmp = null;
         try {
             bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
