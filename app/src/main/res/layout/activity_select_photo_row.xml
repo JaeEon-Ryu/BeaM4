@@ -23,7 +23,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/sample1" />
+                app:srcCompat="@drawable/ic_mood_black_24dp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

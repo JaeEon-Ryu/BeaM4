@@ -1,9 +1,5 @@
 package com.example.beam4;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.RequiresApi;
 
 public class SortByTimeAdapter extends BaseAdapter {
 

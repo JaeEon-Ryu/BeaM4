@@ -36,11 +36,13 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
 
             ArrayList<Uri> photoFileArrayList = new ArrayList<>();
 
-            for (File f : files){
-                Uri uri = Uri.parse("file:///" + f.toString());
-                photoFileArrayList.add(uri);
+            if (files != null ) {
+                for (File f : files) {
+                    Uri uri = Uri.parse("file:///" + f.toString());
+                    photoFileArrayList.add(uri);
+                }
+                Collections.sort(photoFileArrayList, Collections.reverseOrder());
             }
-            Collections.sort(photoFileArrayList, Collections.reverseOrder());
 
 
             // 전송 어떻게 하지

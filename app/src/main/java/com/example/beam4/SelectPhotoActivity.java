@@ -45,13 +45,23 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_photo);
 
+        /*
+        toolbar=findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+         */
+
         photoGroup.clear();
         selectedPhotoGroup.clear();
         unselectedPhotoGroup.clear();
-
-        for (int i = 0; i < 20; i++) {
-            photoGroup.add(photoFileClass.photoFileArrayList.get(i));
+        if (photoFileClass.photoFileArrayList != null) {
+            for (int i = 0; i < 20; i++) {
+                photoGroup.add(photoFileClass.photoFileArrayList.get(i));
+            }
         }
+
 
         for (int i = 0; i < 20; i++) {
             checkedPhotoList.add(false);
