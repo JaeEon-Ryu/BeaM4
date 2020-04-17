@@ -46,7 +46,6 @@
         android:background="@color/colorWhite"
         android:layout_below="@+id/layout_SBI"/>
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -55,6 +54,8 @@
         android:gravity="center"
         android:textColor="@color/colorWhite"
         />
+
+
 
 </LinearLayout>
 
