@@ -75,7 +75,7 @@ public class SelectPhotoActivityRowAdapter extends RecyclerView.Adapter<SelectPh
 
         Matrix matrix = new Matrix();
         matrix.preRotate(90,0,0);
-        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+//        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
         bmp = Bitmap.createScaledBitmap(bmp, 250, 250, false);
 
         //---------------------------------------------------------------
