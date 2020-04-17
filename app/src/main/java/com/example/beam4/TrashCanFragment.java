@@ -3,6 +3,7 @@ package com.example.beam4;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.widget.GridView;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class TrashCanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ArrayList<String> imageIDs = photoFileClass.photoFileArrayList;
+        ArrayList<Uri> imageIDs = photoFileClass.photoFileArrayList;
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_trash_can, null);

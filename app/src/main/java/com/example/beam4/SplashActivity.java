@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
@@ -33,9 +34,11 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
             File directory = new File(path);
             File[] files = directory.listFiles();
 
-            ArrayList<String> photoFileArrayList = new ArrayList<>();
+            ArrayList<Uri> photoFileArrayList = new ArrayList<>();
+
             for (File f : files){
-                photoFileArrayList.add(f.toString());
+                Uri uri = Uri.parse("file:///" + f.toString());
+                photoFileArrayList.add(uri);
             }
             Collections.sort(photoFileArrayList, Collections.reverseOrder());
 
@@ -45,7 +48,7 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
 
 
             // mainActivity 시작
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, SelectPhotoActivity.class));
             // splash 시간 주는 자리
             finish();
         } else {

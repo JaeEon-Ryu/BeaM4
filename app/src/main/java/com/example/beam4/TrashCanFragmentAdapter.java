@@ -20,9 +20,9 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
     Context context = null;
 
     // 이미지 파일들의 리소스 ID를 담는 배열
-    ArrayList<String> imageIDs = null;
+    ArrayList<Uri> imageIDs = null;
 
-    public TrashCanFragmentAdapter(Context context, ArrayList<String> imageIDs) {
+    public TrashCanFragmentAdapter(Context context, ArrayList<Uri> imageIDs) {
         this.context = context;
         this.imageIDs = imageIDs;
     }
@@ -52,7 +52,7 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
             // GridView 뷰를 구성할 ImageView 뷰의 비트맵을 정의합니다.
             // 그리고 그것의 크기를 320*240으로 줄입니다.
             // 크기를 줄이는 이유는 메모리 부족 문제를 막을 수 있기 때문입니다.
-            Uri uri = Uri.parse("file:///" + imageIDs.get(position));
+            Uri uri = imageIDs.get(position);
             Bitmap bmp = null;
             try {
                 bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
