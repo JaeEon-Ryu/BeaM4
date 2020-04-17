@@ -27,8 +27,8 @@ public class SortByTimeFragment extends Fragment {
 
 
         for(int i=0; i<5; i++) {
-            timeData.add(new SortByTime("2020-04-1"+i, R.drawable.sample_1, R.drawable.sample_2
-                    , R.drawable.sample_3, R.drawable.sample_4, R.drawable.sample_5, R.drawable.ic_add_white_24dp));
+            timeData.add(new SortByTime("2020-04-1"+i, R.drawable.want_sleep, R.drawable.want_sleep
+                    , R.drawable.want_sleep, R.drawable.want_sleep, R.drawable.want_sleep, R.drawable.ic_add_white_24dp));
         }
 
         SortByTimeAdapter adapter = new SortByTimeAdapter(timeData);
