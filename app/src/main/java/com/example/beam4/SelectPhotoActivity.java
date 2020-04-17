@@ -57,7 +57,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         selectedPhotoGroup.clear();
         unselectedPhotoGroup.clear();
         if (photoFileClass.photoFileArrayList != null) {
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < photoFileClass.photoFileArrayList.size(); i++) {
                 photoGroup.add(photoFileClass.photoFileArrayList.get(i));
             }
         }
