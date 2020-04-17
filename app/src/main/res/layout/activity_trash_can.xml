@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent"
+    tools:context=".TrashCanFragment"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/layout1"
@@ -16,33 +17,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:background="@color/colorPrimary"
-           >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.22"
                 android:orientation="horizontal">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <Button
-                android:id="@+id/select_btn"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                    android:id="@+id/select_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="2dp"
-                    android:background="@drawable/btn_select"/>
+                    android:background="@drawable/btn_select" />
+
                 <Button
                     android:id="@+id/restore_btn"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
-                    android:padding="5dp"
-                    android:text="복원"
-                    android:textSize="8pt" />
+                    android:background="@drawable/btn_restore" />
             </LinearLayout>
 
             <View
@@ -73,13 +74,13 @@
     <GridView
         android:id="@+id/gridViewImages"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/view2"
         android:horizontalSpacing="10dp"
         android:numColumns="4"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:verticalSpacing="10dp"
-        android:layout_below="@id/view2"  />
+        android:verticalSpacing="10dp" />
 
 
     <View
@@ -89,4 +90,4 @@
         android:background="@color/colorWhite" />
 
 
-</RelativeLayout>
+</LinearLayout>

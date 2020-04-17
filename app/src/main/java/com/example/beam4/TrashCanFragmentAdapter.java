@@ -20,7 +20,7 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
     Context context = null;
 
     // 이미지 파일들의 리소스 ID를 담는 배열
-    ArrayList<Uri> imageIDs = null;
+    ArrayList<Uri> imageIDs = new ArrayList<>();
 
     public TrashCanFragmentAdapter(Context context, ArrayList<Uri> imageIDs) {
         this.context = context;

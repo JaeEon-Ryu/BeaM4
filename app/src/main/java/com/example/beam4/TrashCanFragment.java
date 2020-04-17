@@ -31,32 +31,24 @@ public class TrashCanFragment extends Fragment {
     private GridView gridViewImages;
     private TrashCanFragmentAdapter imageGridAdapter;
 
-    // 그리드뷰 항목에 셋팅한 데이터
-//    private int[] imageIDs = new int[] {
-//            R.drawable.sample1,
-//            R.drawable.sample2,
-//            R.drawable.sample3,
-//            R.drawable.sample4,
-//    };
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ArrayList<Uri> imageIDs = photoFileClass.photoFileArrayList;
+        ArrayList<Uri> imageIDs = new ArrayList<>(photoFileClass.photoFileArrayList);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_trash_can, null);
 
         // 데이터를 가지고 있는 리스트 생성
         ArrayList<HashMap<String, Object>> data_list = new ArrayList<HashMap<String, Object>>();
-        for (int i = 0; i < imageIDs.size(); i++) {
+        int count = imageIDs.size();
+        for (int i = 0; i < count; i++) {
             // 항목 하나를 구성하기 위해서 필요한 데이터를 해시 맵에 담는다.
-            HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put("", imageIDs.get(i));
-            data_list.add(map);
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            hashMap.put("", imageIDs.get(i));
+            data_list.add(hashMap);
         }
 
         /*
@@ -71,12 +63,13 @@ public class TrashCanFragment extends Fragment {
         imageGridAdapter = new TrashCanFragmentAdapter(this.getActivity(), imageIDs);
         gridViewImages.setAdapter(imageGridAdapter);
 
-        imageGridAdapter.notifyDataSetChanged();
+        //imageGridAdapter.notifyDataSetChanged();
 
         return view;
 
         // return inflater.inflate(R.layout.fragment_trash_can, container, false);
     }
+
 
 }
 
