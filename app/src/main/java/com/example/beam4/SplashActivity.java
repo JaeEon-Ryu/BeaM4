@@ -50,7 +50,7 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
 
 
             // mainActivity 시작
-            startActivity(new Intent(this, SelectPhotoActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             // splash 시간 주는 자리
             finish();
         } else {

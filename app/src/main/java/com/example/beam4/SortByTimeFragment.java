@@ -25,21 +25,11 @@ public class SortByTimeFragment extends Fragment {
         // Inflate the layout for this fragment
         ArrayList<SortByTime> timeData = new ArrayList<>();
 
-        timeData.add(new SortByTime("2020-04-11",R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp
-                ,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_add_white_24dp));
 
-        timeData.add(new SortByTime("2020-04-12",R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp
-                ,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp));
-
-        timeData.add(new SortByTime("2020-04-13",R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp
-                ,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp));
-
-        timeData.add(new SortByTime("2020-04-14",R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp
-                ,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp));
-
-        timeData.add(new SortByTime("2020-04-15",R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp
-                ,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_mood_black_24dp,R.drawable.ic_add_white_24dp));
-
+        for(int i=0; i<5; i++) {
+            timeData.add(new SortByTime("2020-04-1"+i, R.drawable.sample_1, R.drawable.sample_2
+                    , R.drawable.sample_3, R.drawable.sample_4, R.drawable.sample_5, R.drawable.ic_add_white_24dp));
+        }
 
         SortByTimeAdapter adapter = new SortByTimeAdapter(timeData);
         View view = inflater.inflate(R.layout.fragment_sort_by_time, container, false);
