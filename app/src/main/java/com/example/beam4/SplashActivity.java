@@ -117,7 +117,7 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
         protected void onPostExecute(ArrayList<Uri> uris) {
             photoFileClass.photoFileArrayList = uris;
             // mainActivity 시작
-            startActivity(new Intent(com.example.beam4.SplashActivity.this, SelectPhotoActivity.class));
+            startActivity(new Intent(com.example.beam4.SplashActivity.this, MainActivity.class));
             // splash 시간 주는 자리
             finish();
         }
