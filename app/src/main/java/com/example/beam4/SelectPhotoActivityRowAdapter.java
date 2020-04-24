@@ -2,9 +2,9 @@ package com.example.beam4;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +18,9 @@ import java.util.ArrayList;
 
 public class SelectPhotoActivityRowAdapter extends RecyclerView.Adapter<SelectPhotoActivityRowAdapter.ViewHolder> {
     Context context = null;
-    private ArrayList<Uri> photoIds;
-    SelectPhotoActivityRowAdapter(Context context, ArrayList<Uri> photoIds){
+    private ArrayList<Bitmap> photoIds;
+
+    SelectPhotoActivityRowAdapter(Context context, ArrayList<Bitmap> photoIds){
         this.context = context;
         this.photoIds = photoIds;
     }
@@ -64,19 +65,8 @@ public class SelectPhotoActivityRowAdapter extends RecyclerView.Adapter<SelectPh
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
+        Bitmap bmp = photoIds.get(position);
 
-        Uri uri = photoIds.get(position);
-        Bitmap bmp = null;
-        try {
-            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Matrix matrix = new Matrix();
-        matrix.preRotate(90,0,0);
-//        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
-        bmp = Bitmap.createScaledBitmap(bmp, 250, 250, false);
 
         //---------------------------------------------------------------
 
@@ -90,4 +80,5 @@ public class SelectPhotoActivityRowAdapter extends RecyclerView.Adapter<SelectPh
     public int getItemCount() {
         return  photoIds.size();
     }
+
 }

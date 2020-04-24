@@ -5,8 +5,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -31,28 +35,14 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
 
         if(readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED){
             String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+ "/Camera";
-            File directory = new File(path);
-            File[] files = directory.listFiles();
-
-            ArrayList<Uri> photoFileArrayList = new ArrayList<>();
-
-            if (files != null ) {
-                for (File f : files) {
-                    Uri uri = Uri.parse("file:///" + f.toString());
-                    photoFileArrayList.add(uri);
-                }
-                Collections.sort(photoFileArrayList, Collections.reverseOrder());
+            try {
+                new DownLoadPhotoTask().execute(path);
+            } catch(Exception e){
+                Toast.makeText(getApplicationContext(), "사진 로드 에러", Toast.LENGTH_LONG).show();
+                finish();
             }
 
 
-            // 전송 어떻게 하지
-            photoFileClass.photoFileArrayList = photoFileArrayList;
-
-
-            // mainActivity 시작
-            startActivity(new Intent(this, MainActivity.class));
-            // splash 시간 주는 자리
-            finish();
         } else {
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0]) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[1])){
@@ -90,6 +80,46 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
                     finish();
                 }
             }
+        }
+    }
+
+    private class DownLoadPhotoTask extends AsyncTask<String, Void, ArrayList<Uri>>{
+
+        @Override
+        protected ArrayList<Uri> doInBackground(String... path) {
+            File directory = new File(path[0]);
+            File[] files = directory.listFiles(
+                    new FilenameFilter() {
+                        public boolean accept(File dir, String filename) {
+                            Boolean bOK = false;
+                            if(filename.toLowerCase().endsWith(".png")) bOK = true;
+                            if(filename.toLowerCase().endsWith(".9.png")) bOK = true;
+                            if(filename.toLowerCase().endsWith(".gif")) bOK = true;
+                            if(filename.toLowerCase().endsWith(".jpg")) bOK = true;
+                            return bOK;
+                        }
+                    });
+
+
+            ArrayList<Uri> photoFileArrayList = new ArrayList<>();
+
+            if (files != null ) {
+                for (File f : files) {
+                    Uri uri = Uri.parse("file:///" + f.toString());
+                    photoFileArrayList.add(uri);
+                }
+                Collections.sort(photoFileArrayList, Collections.reverseOrder());
+            }
+            return photoFileArrayList;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Uri> uris) {
+            photoFileClass.photoFileArrayList = uris;
+            // mainActivity 시작
+            startActivity(new Intent(com.example.beam4.SplashActivity.this, SelectPhotoActivity.class));
+            // splash 시간 주는 자리
+            finish();
         }
     }
 }
