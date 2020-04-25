@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 
 import android.net.Uri;
 import android.os.Environment;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ public class TrashCanFragment extends Fragment {
     }
     private GridView gridViewImages;
     private TrashCanFragmentAdapter imageGridAdapter;
+    private CheckBox checkButton;
 
 
     @Override
@@ -58,6 +60,9 @@ public class TrashCanFragment extends Fragment {
         //데이터를 셋팅할 뷰의 아이디
         int id = R.id.samplePhoto;
         */
+
+        //select, cancel btn
+
 
         gridViewImages = (GridView)view.findViewById(R.id.gridViewImages);
         imageGridAdapter = new TrashCanFragmentAdapter(this.getActivity(), imageIDs);
