@@ -44,7 +44,15 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
-                    android:background="@drawable/btn_restore" />
+                    android:background="@drawable/restorebtn_chage" />
+
+                <Button
+                    android:id="@+id/delete_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/deletebtn_change" />
+
             </LinearLayout>
 
             <View
