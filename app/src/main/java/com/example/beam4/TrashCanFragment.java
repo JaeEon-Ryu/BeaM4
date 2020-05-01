@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 
 import android.net.Uri;
 import android.os.Environment;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.os.Bundle;
@@ -23,22 +24,29 @@ import java.util.HashMap;
 
 
 public class TrashCanFragment extends Fragment {
+    private GridView gridViewImages;
+    private CheckBox checkBox;
+    private CheckBox select_button;
+    private Button delete_button;
+    private Button restore_button;
+    private ArrayList<Uri> photoGroup = new ArrayList<>();
+    private ArrayList<Uri> unselectedPhotoGroup = new ArrayList<>();
+    private Uri unselectedPhoto;
+    private ArrayList<Uri> selectedPhotoGroup = new ArrayList<>();
+    private Uri selectedPhoto;
+    private ArrayList<Boolean> checkedPhotoList = new ArrayList<>();
+    private TrashCanFragmentAdapter imageGridAdapter;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
-    private GridView gridViewImages;
-    private TrashCanFragmentAdapter imageGridAdapter;
-    private CheckBox checkButton;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ArrayList<Uri> imageIDs = new ArrayList<>(photoFileClass.photoFileArrayList);
+        ArrayList<Uri> imageIDs = new ArrayList<>(photoFileClass.trashFileArrayList);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_trash_can, null);
@@ -47,32 +55,35 @@ public class TrashCanFragment extends Fragment {
         ArrayList<HashMap<String, Object>> data_list = new ArrayList<HashMap<String, Object>>();
         int count = imageIDs.size();
         for (int i = 0; i < count; i++) {
-            // 항목 하나를 구성하기 위해서 필요한 데이터를 해시 맵에 담는다.
             HashMap<String, Object> hashMap = new HashMap<String, Object>();
             hashMap.put("", imageIDs.get(i));
             data_list.add(hashMap);
         }
 
-        /*
-        // 해시 맵 객체에 데이터를 저장할 때 사용한 이름
-        String key = "image";
+        if (imageIDs != null) {
+            for (int i = 0; i < count; i++) {
+                photoGroup.add(photoFileClass.trashFileArrayList.get(i));
+            }
+        }
 
-        //데이터를 셋팅할 뷰의 아이디
-        int id = R.id.samplePhoto;
-        */
-
-        //select, cancel btn
+        for (int i = 0; i < count; i++) {
+            checkedPhotoList.add(false);
+        }
 
 
         gridViewImages = (GridView)view.findViewById(R.id.gridViewImages);
+        select_button = (CheckBox)view.findViewById(R.id.select_btn);
+        //delete_button = (Button)view.findViewById(R.id.delete_btn);
+        restore_button = (Button)view.findViewById(R.id.restore_btn);
+        // select_button.setOnCheckedChangeListener();
+
+
+
         imageGridAdapter = new TrashCanFragmentAdapter(this.getActivity(), imageIDs);
         gridViewImages.setAdapter(imageGridAdapter);
 
-        //imageGridAdapter.notifyDataSetChanged();
 
         return view;
-
-        // return inflater.inflate(R.layout.fragment_trash_can, container, false);
     }
 
 
