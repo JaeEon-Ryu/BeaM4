@@ -1,21 +1,25 @@
 package com.example.beam4;
 
-import android.graphics.drawable.Icon;
+import android.graphics.Bitmap;
+import android.net.Uri;
+
+import java.net.URI;
+import java.net.URL;
 
 public class SortByTime {
     // private Image store_img;
     private String date;
-    private int image1;
-    private int image2;
-    private int image3;
-    private int image4;
-    private int image5;
-    private int image6;
+    private Bitmap image1;
+    private Bitmap image2;
+    private Bitmap image3;
+    private Bitmap image4;
+    private Bitmap image5;
+    private Bitmap image6;
 
 
-    public SortByTime(String date, int image1, int image2,
-                      int image3, int image4,
-                      int image5, int image6) {
+    public SortByTime(String date, Bitmap image1, Bitmap image2,
+                      Bitmap image3, Bitmap image4,
+                      Bitmap image5, Bitmap image6) {
         // this.store_img = store_img;
         this.date=date;
         this.image1=image1;
@@ -35,52 +39,49 @@ public class SortByTime {
     }
 
 
-    public int getImage1() {
-        return image1;
-    }
+    public Bitmap getImage1() { return image1; }
 
-    public void setImage1(int image1) {
+    public void setImage1(Bitmap image1) {
         this.image1 = image1;
     }
 
-
-    public int getImage2() {
+    public Bitmap getImage2() {
         return image2;
     }
 
-    public void setImage2(int image2) {
+    public void setImage2(Bitmap image2) {
         this.image2 = image2;
     }
 
-    public int getImage3() {
+    public Bitmap getImage3() {
         return image3;
     }
 
-    public void setImage3(int image3) {
+    public void setImage3(Bitmap image3) {
         this.image3 = image3;
     }
 
-    public int getImage4() {
+    public Bitmap getImage4() {
         return image4;
     }
 
-    public void setImage4(int image4) {
+    public void setImage4(Bitmap image4) {
         this.image4 = image4;
     }
 
-    public int getImage5() {
+    public Bitmap getImage5() {
         return image5;
     }
 
-    public void setImage5(int image5) {
+    public void setImage5(Bitmap image5) {
         this.image5 = image5;
     }
 
-    public int getImage6() {
+    public Bitmap getImage6() {
         return image6;
     }
 
-    public void setImage6(int image6) {
+    public void setImage6(Bitmap image6) {
         this.image6 = image6;
     }
 

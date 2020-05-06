@@ -32,6 +32,8 @@ public class SortByImageFragment extends Fragment {
                     , R.drawable.want_sleep, R.drawable.want_sleep, R.drawable.want_sleep, R.drawable.want_sleep));
         }
 
+
+
         SortByImageAdapter adapter = new SortByImageAdapter(timeData);
         View view = inflater.inflate(R.layout.fragment_sort_by_image, container, false);
         listView = (ListView) view.findViewById(R.id.list_view_image);

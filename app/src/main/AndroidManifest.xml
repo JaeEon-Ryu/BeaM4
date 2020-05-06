@@ -4,7 +4,10 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
+    //<uses-permission android:name="android:installLocation=preferExternal"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +18,8 @@
         <activity android:name=".SortByImageAdapter"></activity>
         <activity android:name=".MainPagerAdapter" />
         <activity android:name=".SelectPhotoActivity" />
+
+
         <activity android:name=".MainActivity" />
         <activity android:name=".SettingFragment" />
         <activity android:name=".TrashCanFragment" />

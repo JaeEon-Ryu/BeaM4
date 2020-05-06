@@ -1,5 +1,6 @@
 package com.example.beam4;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -24,8 +25,8 @@ public class SortByTimeAdapter extends BaseAdapter {
     private List<SortByTime> item;
     public SortByTimeAdapter(List<SortByTime> item){
         this.item = item;
-
     }
+
     @Override
     public int getCount() {
         return item.size();
@@ -46,6 +47,15 @@ public class SortByTimeAdapter extends BaseAdapter {
                 .inflate(R.layout.item_sort_by_time, parent, false);
 
         TextView txt_date = convertView.findViewById(R.id.date_sort_by_time);
+
+        /*
+        SortByTime L = item.get(position);
+        for(int i=0; i<item.size(); i++){
+            ImageView img1 = convertView.findViewById(R.id.image1_sort);
+            img1.setImageResource(L.getImage1());
+        }*/
+
+        //TextView txt_date = convertView.findViewById(R.id.date_sort_by_time);
         ImageView img1 = convertView.findViewById(R.id.image1_sort);
         ImageView img2 = convertView.findViewById(R.id.image2_sort);
         ImageView img3 = convertView.findViewById(R.id.image3_sort);
@@ -55,16 +65,17 @@ public class SortByTimeAdapter extends BaseAdapter {
 
         SortByTime L = item.get(position);
         txt_date.setText(L.getDate());
-        img1.setImageResource(L.getImage1());
-        img2.setImageResource(L.getImage2());
-        img3.setImageResource(L.getImage3());
-        img4.setImageResource(L.getImage4());
-        img5.setImageResource(L.getImage5());
-        img6.setImageResource(L.getImage6());
-
+        img1.setImageBitmap(L.getImage1());
+        img2.setImageBitmap(L.getImage2());
+        img3.setImageBitmap(L.getImage3());
+        img4.setImageBitmap(L.getImage4());
+        img5.setImageBitmap(L.getImage5());
+        img6.setImageBitmap(L.getImage6());
 
         return convertView;
     }
+
+
 
 
 }
