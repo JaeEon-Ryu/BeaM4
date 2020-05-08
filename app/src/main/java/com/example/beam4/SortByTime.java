@@ -1,6 +1,7 @@
 package com.example.beam4;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import java.net.URI;
@@ -14,12 +15,12 @@ public class SortByTime {
     private Bitmap image3;
     private Bitmap image4;
     private Bitmap image5;
-    private Bitmap image6;
+    private Drawable image6;
 
 
     public SortByTime(String date, Bitmap image1, Bitmap image2,
                       Bitmap image3, Bitmap image4,
-                      Bitmap image5, Bitmap image6) {
+                      Bitmap image5, Drawable image6) {
         // this.store_img = store_img;
         this.date=date;
         this.image1=image1;
@@ -77,11 +78,11 @@ public class SortByTime {
         this.image5 = image5;
     }
 
-    public Bitmap getImage6() {
+    public Drawable getImage6() {
         return image6;
     }
 
-    public void setImage6(Bitmap image6) {
+    public void setImage6(Drawable image6) {
         this.image6 = image6;
     }
 

@@ -70,7 +70,7 @@ public class SortByTimeAdapter extends BaseAdapter {
         img3.setImageBitmap(L.getImage3());
         img4.setImageBitmap(L.getImage4());
         img5.setImageBitmap(L.getImage5());
-        img6.setImageBitmap(L.getImage6());
+        img6.setImageDrawable(L.getImage6());
 
         return convertView;
     }

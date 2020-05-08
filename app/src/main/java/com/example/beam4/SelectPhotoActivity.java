@@ -54,7 +54,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
             }
         }
 
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 7; i++) {
             checkedPhotoList.add(false);
         }
 

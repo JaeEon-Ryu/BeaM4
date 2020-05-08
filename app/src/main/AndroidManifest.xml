@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
-    //<uses-permission android:name="android:installLocation=preferExternal"/>
+    <uses-permission android:name="android:installLocation=preferExternal"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,8 +18,6 @@
         <activity android:name=".SortByImageAdapter"></activity>
         <activity android:name=".MainPagerAdapter" />
         <activity android:name=".SelectPhotoActivity" />
-
-
         <activity android:name=".MainActivity" />
         <activity android:name=".SettingFragment" />
         <activity android:name=".TrashCanFragment" />
@@ -32,10 +30,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
 
 </manifest>
+
+
+
