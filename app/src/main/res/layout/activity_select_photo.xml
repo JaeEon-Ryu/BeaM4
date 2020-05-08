@@ -23,11 +23,20 @@
             android:background="@color/colorPrimary"
             android:orientation="horizontal">
 
-            <View
-                android:id="@+id/view1_1"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.22" />
+                android:layout_weight="0.22"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/back_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/btn_back" />
+
+            </LinearLayout>
 
             <View
                 android:id="@+id/view1_2"

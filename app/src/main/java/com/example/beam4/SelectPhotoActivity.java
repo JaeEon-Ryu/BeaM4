@@ -27,6 +27,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
     private ArrayList<Uri> photoGroup = new ArrayList<>();
     protected ImageView bigImage;
     private CheckBox checkButton;
+    private Button backspace;
     private Button deleteExceptBM;
     private ArrayList<Uri> unselectedPhotoGroup = new ArrayList<>();
     private Uri unselectedPhoto;
@@ -89,6 +90,16 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         // checkButtonClick
         checkButton = findViewById(R.id.checkButton);
         checkButton.setOnCheckedChangeListener(this);
+
+        //back button
+        backspace = findViewById(R.id.back_btn);
+        backspace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                onBackPressed();
+            }
+        });
 
         // trashcan으로 전송
         deleteExceptBM = findViewById(R.id.deleteExceptBM);
