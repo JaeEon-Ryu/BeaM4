@@ -124,7 +124,7 @@ public class SortByTimeFragment extends Fragment {
 ////
 ////            }
 ////        }
-
+//참고할만한 것 https://offbyone.tistory.com/154
 
         //////////////////////////////////////////////////////
 
@@ -135,7 +135,7 @@ public class SortByTimeFragment extends Fragment {
             plusOn = null;
             String[] indexArray = timeIndex.get(num).split(",");
 //            Log.i(this.getClass().getName(),"tttesting =   " + timeIndex.get(num));
-            Log.i(this.getClass().getName(),"indexArray =   " + indexArray);
+            //Log.i(this.getClass().getName(),"indexArray =   " + indexArray);
 
             for(int i=0; i<indexArray.length; i++) {
                 if(i==5){   // 이 부분에 사진 6개일 때 + 표시 하도록
@@ -185,6 +185,7 @@ public class SortByTimeFragment extends Fragment {
         return view;
 
     }
+
 
 
 
