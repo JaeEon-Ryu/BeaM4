@@ -111,10 +111,10 @@ public class SortByTimeFragment extends Fragment {
             @Override
             public int compare(hourlyPhotography o1, hourlyPhotography o2) {
 
-                if(o1.getTimeString().compareTo(o2.getTimeString()) <= 1){
+                if(o1.getTimeString().compareTo(o2.getTimeString()) < 1){
                     return 1;
                 }
-                else if(o1.getTimeString().compareTo(o2.getTimeString()) >= -1){
+                else if(o1.getTimeString().compareTo(o2.getTimeString()) > -1){
                     return -1;
                 }
                 else{
