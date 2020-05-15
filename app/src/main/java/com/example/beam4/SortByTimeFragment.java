@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class SortByTimeFragment extends Fragment {
@@ -34,9 +36,8 @@ public class SortByTimeFragment extends Fragment {
     ArrayList<SortByTime> timeData = new ArrayList<>();
     ArrayList<Uri> photoGroup = new ArrayList<>();
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
-    ArrayList<String> timeString = new ArrayList<>();
-    ArrayList<String> timeIndex = new ArrayList<>();
     String nullIndex="";
+    ArrayList<hourlyPhotography> timeList = new ArrayList<>();
 
     private ListView listView;
 
@@ -60,8 +61,6 @@ public class SortByTimeFragment extends Fragment {
 //        SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd");
 //        formatter.format(file.lastModified());
 
-
-        String timeIndexDimention = "start";
         if (photoFileClass.photoFileArrayList != null) {
             for (int idx = 0; idx < photoFileClass.photoFileArrayList.size(); idx++) { // photoFileClass.photoFileArrayList.size()
                 String idxString = Integer.toString(idx);
@@ -75,14 +74,12 @@ public class SortByTimeFragment extends Fragment {
                     if (dateTimeCurrent != null) {
                         dateTimeCurrent = dateTimeCurrent.substring(0, 10);
                     }
-
-                    //Log.i(this.getClass().getName(),i + "번째 dateTime = " + dateTimeCurrent);
-
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.i(this.getClass().getName(), "dateTime = 에러");
                 }
 
+                boolean addFlag = true;
                 if (dateTimeCurrent == null) {
                     if (nullIndex.isEmpty()){
                         nullIndex += idxString;
@@ -90,53 +87,57 @@ public class SortByTimeFragment extends Fragment {
                     else {
                         nullIndex += "," + idxString;
                     }
-                } else if (dateTimeCurrent.equals(dateTimePast)) {   // 이전 사진과 날짜가 같은 경우
-                    timeIndexDimention += "," + idxString;
-                    dateTimePast = dateTimeCurrent;
-                } else { // 이전 사진과 날짜가 다른 경우
-//                    Log.i(this.getClass().getName(),"디버깅 : dateTimeCurrent =   " + dateTimeCurrent);
-//                    Log.i(this.getClass().getName(),"디버깅 : dateTimePast =   " + dateTimePast);
-//                    Log.i(this.getClass().getName()," 디버깅 중   ");
-                    if(timeIndexDimention != "start"){ // 첫 start 오류 방지
-                        timeString.add(dateTimeCurrent);
-                        timeIndex.add(timeIndexDimention);
-                    }
-                    timeIndexDimention = idxString;
-                    dateTimePast = dateTimeCurrent;
                 }
+                else {
+                    for(hourlyPhotography s:timeList){
+                        if(s.getTimeString().equals(dateTimeCurrent) == true){
+                            String temp = s.getTimeIndex();
+                            s.setTimeIndex(temp+","+idxString);
+                            addFlag = false;
+                            break;
+                        }
+                    }
+                    if(addFlag){
+                        timeList.add(new hourlyPhotography(dateTimeCurrent,idxString));
 
+                    }
+                }
             }
         }
+
+        ///////////////////////////////////////////////////////////
+        //정렬
+        class dateCompare implements Comparator<hourlyPhotography>{
+            @Override
+            public int compare(hourlyPhotography o1, hourlyPhotography o2) {
+
+                if(o1.getTimeString().compareTo(o2.getTimeString()) <= 1){
+                    return 1;
+                }
+                else if(o1.getTimeString().compareTo(o2.getTimeString()) >= -1){
+                    return -1;
+                }
+                else{
+                    return 0;
+                }
+            }
+        }
+        Collections.sort(timeList, new dateCompare());
+        //////////////////////////////////////////////////////////
 
         setBitmapArrayList(photoGroup);
         Bitmap[] timeDataImg = new Bitmap[5];
         Drawable plusOn;
-        ///////////////////////////////////////////////////////////
-        // 날짜 정렬
-//        ArrayList<Integer> orderArray = new ArrayList<>();
-////        ArrayList<String> timeStringCopy = new ArrayList<>();
-////        timeStringCopy.addAll(timeString);
-////        for(int i=0; i<timeStringCopy.size(); i++){
-////            orderArray.add(i);
-////        }
-////        for(int i=0; i<timeStringCopy.size(); i++){
-////            for(int i=0; i<timeStringCopy.size(); i++){
-////
-////            }
-////        }
-//참고할만한 것 https://offbyone.tistory.com/154
 
-        //////////////////////////////////////////////////////
+        //Log.i(this.getClass().getName(),"TTest  :  hourly전 " );
 
-        for (int num = 0; num < timeString.size(); num++) { // 날짜 개수만큼 반복
+        for(hourlyPhotography s: timeList) {
             for (int reset = 0; reset < 5; reset++) {
                 timeDataImg[reset] = null;
             }
             plusOn = null;
-            String[] indexArray = timeIndex.get(num).split(",");
-//            Log.i(this.getClass().getName(),"tttesting =   " + timeIndex.get(num));
-            //Log.i(this.getClass().getName(),"indexArray =   " + indexArray);
-
+            //Log.i(this.getClass().getName(),"TTest  :   " + s.getTimeIndex().split(","));
+            String[] indexArray = s.getTimeIndex().split(",");
             for(int i=0; i<indexArray.length; i++) {
                 if(i==5){   // 이 부분에 사진 6개일 때 + 표시 하도록
                     Drawable plusImage = getResources().getDrawable(R.drawable.ic_add_white_24dp);
@@ -146,29 +147,33 @@ public class SortByTimeFragment extends Fragment {
                 int idxInt = Integer.parseInt(indexArray[i].toString());
                 timeDataImg[i] = bitmapArrayList.get(idxInt);
             }
-            timeData.add(new SortByTime(timeString.get(num), timeDataImg[0], timeDataImg[1], timeDataImg[2],
+            timeData.add(new SortByTime(s.getTimeString(), timeDataImg[0], timeDataImg[1], timeDataImg[2],
                     timeDataImg[3], timeDataImg[4], plusOn));
+
         }
-        String[] nullArray = nullIndex.split(",");
 
         ///////////////////////////////////////////////////////////
+
         // 시간정보 null 처리
-        for (int reset = 0; reset < 5; reset++) {
-            timeDataImg[reset] = null;
-        }
-        plusOn=null;
-        for(int i=0; i<nullArray.length; i++) {
-            if(i==5){   // 이 부분에 사진 6개일 때 + 표시 하도록
-                Drawable plusImage = getResources().getDrawable(R.drawable.ic_add_white_24dp);
-                plusOn = plusImage;
-                break;
+        if (nullIndex.length() > 1) {
+            String[] nullArray = nullIndex.split(",");
+            for (int reset = 0; reset < 5; reset++) {
+                timeDataImg[reset] = null;
             }
-            int idxInt = Integer.parseInt(nullArray[i].toString());
-            timeDataImg[i] = bitmapArrayList.get(idxInt);
+            plusOn = null;
+            for (int i = 0; i < nullArray.length; i++) {
+                if (i == 5) {   // 이 부분에 사진 6개일 때 + 표시 하도록
+                    Drawable plusImage = getResources().getDrawable(R.drawable.ic_add_white_24dp);
+                    plusOn = plusImage;
+                    break;
+                }
+                int idxInt = Integer.parseInt(nullArray[i].toString());
+                timeDataImg[i] = bitmapArrayList.get(idxInt);
+            }
+            timeData.add(new SortByTime("시간 정보가 없습니다.", timeDataImg[0], timeDataImg[1], timeDataImg[2],
+                    timeDataImg[3], timeDataImg[4], plusOn));
         }
-        timeData.add(new SortByTime("시간 정보가 없습니다.", timeDataImg[0], timeDataImg[1], timeDataImg[2],
-                timeDataImg[3], timeDataImg[4], plusOn));
-        ///////////////////////////////////////////////////////////
+
 
         SortByTimeAdapter adapter = new SortByTimeAdapter(timeData);
         View view = inflater.inflate(R.layout.fragment_sort_by_time, container, false);
@@ -185,8 +190,6 @@ public class SortByTimeFragment extends Fragment {
         return view;
 
     }
-
-
 
 
     private void setBitmapArrayList(ArrayList<Uri> photoUriGroup) {
@@ -227,4 +230,32 @@ public class SortByTimeFragment extends Fragment {
     }
 }
 
+
+class hourlyPhotography {
+
+    private String timeString;
+    private String timeIndex;
+
+    public hourlyPhotography(String timeString, String timeIndex) {
+        this.timeString = timeString;
+        this.timeIndex = timeIndex;
+    }
+
+    public void setTimeString(String timeString) {
+        this.timeString = timeString;
+    }
+
+    public void setTimeIndex(String timeIndex) {
+        this.timeIndex = timeIndex;
+    }
+
+    public String getTimeIndex() {
+        return this.timeIndex;
+    }
+
+    public String getTimeString() {
+        return this.timeString;
+    }
+
+}
 

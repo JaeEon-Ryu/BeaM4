@@ -123,17 +123,17 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
 
             ArrayList<Uri> photoFileArrayList = new ArrayList<>();
 
-            Log.i(this.getClass().getName(),"검색시작");
+            //Log.i(this.getClass().getName(),"검색시작");
             if (files != null ) {
                 for (File f : files) {
                     Uri uri = Uri.parse("file:///" + f.toString());
                     photoFileArrayList.add(uri);
 
-                    Log.i(this.getClass().getName(),"검색 f             =    " + f);
-                    Log.i(this.getClass().getName(),"검색 f.toString()  =    " + f.toString());
-                    Log.i(this.getClass().getName(),"검색 uri 정보      =    " + uri);
+                    //Log.i(this.getClass().getName(),"검색 f             =    " + f);
+                   // Log.i(this.getClass().getName(),"검색 f.toString()  =    " + f.toString());
+                   // Log.i(this.getClass().getName(),"검색 uri 정보      =    " + uri);
                 }
-                Collections.sort(photoFileArrayList, Collections.reverseOrder());
+                //Collections.sort(photoFileArrayList, Collections.reverseOrder());
             }
             return photoFileArrayList;
         }
