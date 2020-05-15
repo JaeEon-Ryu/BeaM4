@@ -37,7 +37,7 @@ public class SortByTimeFragment extends Fragment {
     ArrayList<Uri> photoGroup = new ArrayList<>();
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     String nullIndex="";
-    ArrayList<hourlyPhotography> timeList = new ArrayList<>();
+    public static ArrayList<hourlyPhotography> timeList = new ArrayList<>();
 
     private ListView listView;
 
@@ -52,14 +52,7 @@ public class SortByTimeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // uri 정보 받아오기
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy:MM:dd", Locale.KOREA);
         String dateTimeCurrent = "";
-        String dateTimePast = "days";
-
-
-//        File file = new File("Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + \"/Camera/\"");
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd");
-//        formatter.format(file.lastModified());
 
         if (photoFileClass.photoFileArrayList != null) {
             for (int idx = 0; idx < photoFileClass.photoFileArrayList.size(); idx++) { // photoFileClass.photoFileArrayList.size()
@@ -67,9 +60,7 @@ public class SortByTimeFragment extends Fragment {
                 photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
                 // 사진정보 받기
                 try {
-                    //Log.i(this.getClass().getName(),"uri가져오기 =   " + photoFileClass.photoFileArrayList.get(i));
                     ExifInterface exif = new ExifInterface(photoFileClass.photoFileArrayList.get(idx).getPath());
-                    //Log.i(this.getClass().getName(),"exif정보 =   " + exif);
                     dateTimeCurrent = exif.getAttribute(ExifInterface.TAG_DATETIME);
                     if (dateTimeCurrent != null) {
                         dateTimeCurrent = dateTimeCurrent.substring(0, 10);
@@ -123,13 +114,12 @@ public class SortByTimeFragment extends Fragment {
             }
         }
         Collections.sort(timeList, new dateCompare());
-        //////////////////////////////////////////////////////////
 
+        //////////////////////////////////////////////////////////
+        // 각 행마다 날짜 & 이미지들 넣기
         setBitmapArrayList(photoGroup);
         Bitmap[] timeDataImg = new Bitmap[5];
         Drawable plusOn;
-
-        //Log.i(this.getClass().getName(),"TTest  :  hourly전 " );
 
         for(hourlyPhotography s: timeList) {
             for (int reset = 0; reset < 5; reset++) {
@@ -173,7 +163,7 @@ public class SortByTimeFragment extends Fragment {
             timeData.add(new SortByTime("시간 정보가 없습니다.", timeDataImg[0], timeDataImg[1], timeDataImg[2],
                     timeDataImg[3], timeDataImg[4], plusOn));
         }
-
+        //////////////////////////////////////////////////////
 
         SortByTimeAdapter adapter = new SortByTimeAdapter(timeData);
         View view = inflater.inflate(R.layout.fragment_sort_by_time, container, false);
@@ -184,6 +174,7 @@ public class SortByTimeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), SelectPhotoActivity.class);
+                intent.putExtra("index",timeData.get(position).getDate());
                 startActivity(intent);
             }
         });
@@ -211,51 +202,23 @@ public class SortByTimeFragment extends Fragment {
         }
     }
 
-    private void setBitmap(Bitmap imageTest, Uri uri) {
-        bitmapArrayList.clear();
-        Bitmap bmp = null;
-        try {
-            bmp = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), uri);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 250, false);
-            int degree = RotateBmpClass.GetExifOrientation(uri.getPath());
-            Bitmap rotatedBitmap = RotateBmpClass.GetRotatedBitmap(scaledBitmap, degree);
-            bmp.recycle();
-            bmp = rotatedBitmap;
-            imageTest = bmp;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    private void setBitmap(Bitmap imageTest, Uri uri) {
+//        bitmapArrayList.clear();
+//        Bitmap bmp = null;
+//        try {
+//            bmp = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), uri);
+//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 250, false);
+//            int degree = RotateBmpClass.GetExifOrientation(uri.getPath());
+//            Bitmap rotatedBitmap = RotateBmpClass.GetRotatedBitmap(scaledBitmap, degree);
+//            bmp.recycle();
+//            bmp = rotatedBitmap;
+//            imageTest = bmp;
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 }
 
-
-class hourlyPhotography {
-
-    private String timeString;
-    private String timeIndex;
-
-    public hourlyPhotography(String timeString, String timeIndex) {
-        this.timeString = timeString;
-        this.timeIndex = timeIndex;
-    }
-
-    public void setTimeString(String timeString) {
-        this.timeString = timeString;
-    }
-
-    public void setTimeIndex(String timeIndex) {
-        this.timeIndex = timeIndex;
-    }
-
-    public String getTimeIndex() {
-        return this.timeIndex;
-    }
-
-    public String getTimeString() {
-        return this.timeString;
-    }
-
-}
 
