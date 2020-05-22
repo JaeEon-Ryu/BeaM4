@@ -1,31 +1,84 @@
 package com.example.beam4;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.LayoutInflaterCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class TrashCanFragmentAdapter extends BaseAdapter {
 
-    Context context = null;
+    static final String TAG = "TrashCanFragmentAdapter";
 
-    // 이미지 파일들의 리소스 ID를 담는 배열
+    private LayoutInflater mInflater;
+    private ArrayList<Bitmap> photoIDs;
+    private ViewHolder viewHolder;
+    Context context = null;
     ArrayList<Uri> imageIDs = new ArrayList<>();
 
+
     public TrashCanFragmentAdapter(Context context, ArrayList<Uri> imageIDs) {
+        Log.d(TAG, "TrashCanFragmentAdapter");
+        mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
-        this.imageIDs = imageIDs;
+        // this.photoIDs = photoIDs; // bitmap
+        this.imageIDs = imageIDs; // uri
     }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        CheckBox checkbox;
+        int id;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // sean
+            Log.d(TAG, "RecyclerView.ViewHolder");
+            // imageView = itemView.findViewById(R.id.thumbImage);
+            imageView = itemView.findViewById(R.id.Image);
+            checkbox = itemView.findViewById(R.id.CheckBox);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(v, position);
+                        }
+                    }
+                }
+            });
+        }
+    }
+        public interface OnItemClickListener{
+        void onItemClick(View v, int position);
+    }
+
+    private OnItemClickListener onItemClickListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.onItemClickListener = listener;
+    }
+
 
     @Override
     public int getCount() {
@@ -33,27 +86,36 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return (null != imageIDs)? imageIDs.get(i): 0;
+    public Object getItem(int position) {
+        return (null != imageIDs)? imageIDs.get(position): 0;
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = null;
+        // ViewHolder holder;
+        Log.d(TAG,"getView");
 
-        if (null != convertView)
-            imageView = (ImageView)convertView;
-        else {
-            // GridView 뷰를 구성할 ImageView 뷰의 비트맵을 정의합니다.
-            // 그리고 그것의 크기를 320*240으로 줄입니다.
-            // 크기를 줄이는 이유는 메모리 부족 문제를 막을 수 있기 때문입니다.
+        if (null == convertView) {
+            /*
             Uri uri = imageIDs.get(position);
             Bitmap bmp = null;
+            */
+
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.activity_trash_can_row, parent, false);
+
+            viewHolder.imageView = (ImageView)convertView.findViewById(R.id.Image);
+            viewHolder.checkbox = (CheckBox)convertView.findViewById(R.id.CheckBox);
+
+            convertView.setTag(viewHolder);
+
+            /*
             try {
                 bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
             } catch (IOException e) {
@@ -62,18 +124,54 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
             Matrix matrix = new Matrix();
             matrix.preRotate(90,0,0);
             bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
-            bmp = Bitmap.createScaledBitmap(bmp, 320, 320, false);
+            bmp = Bitmap.createScaledBitmap(bmp, 250, 250, false);
 
-            //---------------------------------------------------------------
-
-            // GridView 뷰를 구성할 ImageView 뷰들을 정의합니다.
-            // 뷰에 지정할 이미지는 앞에서 정의한 비트맵 객체입니다.
             imageView = new ImageView(context);
             imageView.setAdjustViewBounds(true);
             imageView.setImageBitmap(bmp);
+            */
 
             // ImageClickListener
+        }
+
+        else {
+            imageView = (ImageView)convertView;
+            viewHolder = (ViewHolder)convertView.getTag();
+            viewHolder.checkbox.setId(position);
+            viewHolder.imageView.setId(position);
+            viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox checkBox = (CheckBox) v;
+                    int id = checkBox.getId();
+                    if (TrashCanFragment.thumbnailsSelection[id]){
+                        checkBox.setChecked(false);
+                        TrashCanFragment.thumbnailsSelection[id] = false;
+                    }
+                    else {
+                        checkBox.setChecked(true);
+                        TrashCanFragment.thumbnailsSelection[id] = true;
+                    }
+                }
+            });
+            viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id = v.getId();
+                    // sean
+                    Intent intent = new Intent(v.getContext(), TrashCanFragment.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    v.getContext().startActivity(intent);
+                    intent.setDataAndType(Uri.parse("file://" + TrashCanFragment.arrPath[id]), "image/*");
+                }
+            });
+            viewHolder.imageView.setImageBitmap(TrashCanFragment.thumbnails[position]);
+            viewHolder.checkbox.setChecked(TrashCanFragment.thumbnailsSelection[position]);
+            viewHolder.id = position;
+            return convertView;
         }
         return imageView;
     }
 }
+
+

@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".SortByImageAdapter"></activity>
+        <activity android:name=".SortByImageAdapter" />
         <activity android:name=".MainPagerAdapter" />
         <activity android:name=".SelectPhotoActivity" />
         <activity android:name=".MainActivity" />
