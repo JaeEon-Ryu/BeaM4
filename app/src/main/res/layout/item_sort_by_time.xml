@@ -4,83 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SortByTimeAdapter"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".SortByTimeAdapter">
 
 
     <TextView
         android:id="@+id/date_sort_by_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="xx월 xx일"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:text="xx월 xx일"
+        android:textSize="20dp"
 
         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:orientation="horizontal"
+        android:orientation="horizontal">
 
-
-        >
 
         <ImageView
-            android:id="@+id/image1_sort"
+            android:id="@+id/time1_sort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
             android:layout_margin="5dp"
-            />
+            android:layout_weight="1"
+            android:background="@color/colorPrimary" />
 
         <ImageView
-            android:id="@+id/image2_sort"
+            android:id="@+id/time2_sort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
             android:layout_margin="5dp"
-            />
+            android:layout_weight="1"
+            android:background="@color/colorPrimary" />
 
         <ImageView
-            android:id="@+id/image3_sort"
+            android:id="@+id/time3_sort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
             android:layout_margin="5dp"
-            />
+            android:layout_weight="1"
+            android:background="@color/colorPrimary" />
 
         <ImageView
-            android:id="@+id/image4_sort"
+            android:id="@+id/time4_sort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
             android:layout_margin="5dp"
-            />
+            android:layout_weight="1"
+            android:background="@color/colorPrimary" />
 
         <ImageView
-            android:id="@+id/image5_sort"
+            android:id="@+id/time5_sort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
             android:layout_margin="5dp"
-            />
+            android:layout_weight="1"
+            android:background="@color/colorPrimary" />
 
         <ImageView
-            android:id="@+id/image6_sort"
+            android:id="@+id/time6_sort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_add_white_24dp"
-            android:layout_margin="5dp"
-            />
+            android:src="@drawable/ic_add_white_24dp" />
 
     </LinearLayout>
 

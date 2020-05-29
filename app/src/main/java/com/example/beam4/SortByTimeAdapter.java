@@ -1,11 +1,6 @@
 package com.example.beam4;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SortByTimeAdapter extends BaseAdapter {
@@ -56,12 +48,12 @@ public class SortByTimeAdapter extends BaseAdapter {
         }*/
 
         //TextView txt_date = convertView.findViewById(R.id.date_sort_by_time);
-        ImageView img1 = convertView.findViewById(R.id.image1_sort);
-        ImageView img2 = convertView.findViewById(R.id.image2_sort);
-        ImageView img3 = convertView.findViewById(R.id.image3_sort);
-        ImageView img4 = convertView.findViewById(R.id.image4_sort);
-        ImageView img5 = convertView.findViewById(R.id.image5_sort);
-        ImageView img6 = convertView.findViewById(R.id.image6_sort);
+        ImageView img1 = convertView.findViewById(R.id.time1_sort);
+        ImageView img2 = convertView.findViewById(R.id.time2_sort);
+        ImageView img3 = convertView.findViewById(R.id.time3_sort);
+        ImageView img4 = convertView.findViewById(R.id.time4_sort);
+        ImageView img5 = convertView.findViewById(R.id.time5_sort);
+        ImageView img6 = convertView.findViewById(R.id.time6_sort);
 
         SortByTime L = item.get(position);
         txt_date.setText(L.getDate());

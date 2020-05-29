@@ -1,16 +1,9 @@
 package com.example.beam4;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.UriMatcher;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,16 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.content.Context;
 
-import java.io.File;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Locale;
 
 public class SortByTimeFragment extends Fragment {
 
@@ -175,6 +166,7 @@ public class SortByTimeFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), SelectPhotoActivity.class);
                 intent.putExtra("index",timeData.get(position).getDate());
+                //Log.i(this.getClass().getName(),"exex      =    " + timeData.get(0));
                 startActivity(intent);
             }
         });

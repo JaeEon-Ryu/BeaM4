@@ -32,7 +32,7 @@
                     android:layout_weight="1" />
 
                 <CheckBox
-                    android:id="@+id/select_btn"
+                    android:id="@+id/select_check"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:button="@null"
@@ -80,6 +80,7 @@
         android:layout_below="@+id/layout1"
         android:background="@color/colorWhite" />
 
+
     <GridView
         android:id="@+id/gridViewImages"
         android:layout_width="match_parent"
@@ -89,8 +90,8 @@
         android:numColumns="4"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:verticalSpacing="10dp" />
-
+        android:verticalSpacing="10dp"
+        />
 
     <View
         android:id="@+id/view3"
