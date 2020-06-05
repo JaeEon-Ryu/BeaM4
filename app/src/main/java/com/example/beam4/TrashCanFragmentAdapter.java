@@ -45,7 +45,34 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
         img.setImageBitmap(L.getImage());
 
         CheckBox image_check = (CheckBox)convertView.findViewById(R.id.circle_check);
-        image_check.setVisibility(View.VISIBLE);
+        image_check.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (image_check.isChecked()){
+                    //Log.i(this.getClass().getName(),"이미지   "+ trashFragment.trashData);
+                    TrashCanFragment.checkedTrashList.set(position,true);
+                    //Log.i(this.getClass().getName(),"이미지체크되었음  "+ position);
+                }
+                else{
+                    TrashCanFragment.checkedTrashList.set(position,false);
+                }
+            }
+        });
+
+
+
+//        adapter = new SelectPhotoActivityRowAdapter(com.example.beam4.SelectPhotoActivity.this, bitmapArrayList);
+//        adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View v, int position) {
+//                whatPhotoPosition = position;
+//                new SetBigImageTask().execute(whatPhotoPosition);
+//                checkButton.setChecked(checkedPhotoList.get(position));
+//            }
+//        });
+//        recyclerView.setAdapter(adapter);
+
+
         return convertView;
     }
 

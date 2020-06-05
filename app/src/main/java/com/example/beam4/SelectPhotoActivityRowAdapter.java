@@ -2,9 +2,6 @@ package com.example.beam4;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +10,12 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SelectPhotoActivityRowAdapter extends RecyclerView.Adapter<SelectPhotoActivityRowAdapter.ViewHolder> {
     Context context = null;
     private ArrayList<Bitmap> photoIds;
+
 
     SelectPhotoActivityRowAdapter(Context context, ArrayList<Bitmap> photoIds){
         this.context = context;

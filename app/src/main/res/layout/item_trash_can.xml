@@ -18,11 +18,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:button="@drawable/ic_unchecked"
+        android:button="@null"
         android:clickable="true"
         android:layout_marginRight="7dp"
         android:layout_alignParentRight="true"
-        android:visibility="invisible"
+        android:drawableLeft="@drawable/custom_checkbox"
         />
 
 </RelativeLayout>

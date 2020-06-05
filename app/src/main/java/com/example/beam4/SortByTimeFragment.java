@@ -45,6 +45,7 @@ public class SortByTimeFragment extends Fragment {
         // uri 정보 받아오기
         String dateTimeCurrent = "";
 
+        timeList.clear();
         if (photoFileClass.photoFileArrayList != null) {
             for (int idx = 0; idx < photoFileClass.photoFileArrayList.size(); idx++) { // photoFileClass.photoFileArrayList.size()
                 String idxString = Integer.toString(idx);
