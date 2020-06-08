@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.GridView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -66,15 +68,6 @@ public class TrashCanFragment extends Fragment {
         gridView = view.findViewById(R.id.gridViewImages);
         gridView.setAdapter(adapter);
 
-//        @Override
-//        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//            if(isChecked){
-//                checkedPhotoList.set(whatPhotoPosition, true);
-//            }else{
-//                checkedPhotoList.set(whatPhotoPosition, false);
-//            }
-//        }
-
         // 영구삭제
         Button deletePermanently = (Button)view.findViewById(R.id.delete_permanently_btn);
         deletePermanently.setOnClickListener(new View.OnClickListener(){
@@ -84,25 +77,17 @@ public class TrashCanFragment extends Fragment {
             }
         });
 
-//        adapter = new SelectPhotoActivityRowAdapter(com.example.beam4.SelectPhotoActivity.this, bitmapArrayList);
-//        adapter.setOnItemClickListener(new SelectPhotoActivityRowAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View v, int position) {
-//                whatPhotoPosition = position;
-//                new SetBigImageTask().execute(whatPhotoPosition);
-//                checkButton.setChecked(checkedPhotoList.get(position));
-//            }
-//        });
-//        recyclerView.setAdapter(adapter);
+        // 복원
+        Button restore = (Button)view.findViewById(R.id.restore_btn);
+        restore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { new RestoreTask().execute(); }
+        });
 
-
-        CheckBox select_check = (CheckBox)view.findViewById(R.id.select_check);
-        Button restore_button = (Button)view.findViewById(R.id.restore_btn);
+        //CheckBox select_check = (CheckBox)view.findViewById(R.id.select_check);
 
         return view;
     }
-
-
 
     private Bitmap setBitmap(Uri uri) {
         Bitmap bmp = null;
@@ -117,7 +102,6 @@ public class TrashCanFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return bmp;
     }
 
@@ -129,7 +113,6 @@ public class TrashCanFragment extends Fragment {
 
             for (int i = 0; i < count; i++) {
                 //Log.i(this.getClass().getName(),"쳌디버깅중  "+ checkedTrashList);
-
                 if(checkedTrashList.get(i) == false){
                     unselectedPhoto = photoFileClass.trashFileArrayList.get(i);
                     unselectedPhotoGroup.add(unselectedPhoto);
@@ -144,6 +127,16 @@ public class TrashCanFragment extends Fragment {
             //Log.i(this.getClass().getName(),"쳌디버깅중  "+ trashData);
             checkedTrashList.clear();
 
+            if (selectedPhotoGroup.size() > 0) {
+                for (int i = 0; i < selectedPhotoGroup.size(); i++) {
+                    File file = new File(selectedPhotoGroup.get(i).getPath());
+                    if(file.exists()) {
+                        boolean isDelete = file.delete();
+                        if(isDelete) Log.e("file delete ?", String.valueOf(isDelete));
+                    }
+                }
+            }
+
             if (unselectedPhotoGroup.size() > 0) {
                 for (int i = 0; i < unselectedPhotoGroup.size(); i++) {
                     Bitmap img = setBitmap(unselectedPhotoGroup.get(i));
@@ -155,15 +148,54 @@ public class TrashCanFragment extends Fragment {
 
             //selected에 대해서 영구히 삭제하는 function 필요
 
+            selectedPhotoGroup.clear();
+            unselectedPhotoGroup.clear();
+            return null;
+        }
 
-//            if(unselectedPhotoGroup != null){
-//                photoFileClass.trashFileArrayList.addAll(unselectedPhotoGroup);
-//            }
-//            count = selectedPhotoGroup.size();
-//            for (int i = 0; i < count; i++) {
-//                checkedPhotoList.add(false);
-//            }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            adapter.notifyDataSetChanged();
+        }
 
+    }
+
+    private class RestoreTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            int count = photoFileClass.trashFileArrayList.size();
+
+            for (int i = 0; i < count; i++) {
+                //Log.i(this.getClass().getName(),"쳌디버깅중  "+ checkedTrashList);
+                if(checkedTrashList.get(i) == false){
+                    unselectedPhoto = photoFileClass.trashFileArrayList.get(i);
+                    unselectedPhotoGroup.add(unselectedPhoto);
+                } else{
+                    selectedPhoto = photoFileClass.trashFileArrayList.get(i);
+                    selectedPhotoGroup.add(selectedPhoto);
+                }
+            }
+
+            photoFileClass.trashFileArrayList.clear();
+            trashData.clear();
+            //Log.i(this.getClass().getName(),"쳌디버깅중  "+ trashData);
+            checkedTrashList.clear();
+
+            if (selectedPhotoGroup.size() > 0) {
+                for (int i = 0; i < selectedPhotoGroup.size(); i++) {
+                    photoFileClass.photoFileArrayList.add(selectedPhotoGroup.get(i));
+                }
+            }
+
+            if (unselectedPhotoGroup.size() > 0) {
+                for (int i = 0; i < unselectedPhotoGroup.size(); i++) {
+                    Bitmap img = setBitmap(unselectedPhotoGroup.get(i));
+                    photoFileClass.trashFileArrayList.add(unselectedPhotoGroup.get(i));
+                    trashData.add(new TrashCan(img));
+                    checkedTrashList.add(false);
+                }
+            }
 
             selectedPhotoGroup.clear();
             unselectedPhotoGroup.clear();

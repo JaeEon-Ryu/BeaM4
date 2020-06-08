@@ -29,6 +29,7 @@ public class SortByTimeFragment extends Fragment {
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     String nullIndex="";
     public static ArrayList<hourlyPhotography> timeList = new ArrayList<>();
+    public static SortByTimeAdapter timeAdapter;
 
     private ListView listView;
 
@@ -157,10 +158,10 @@ public class SortByTimeFragment extends Fragment {
         }
         //////////////////////////////////////////////////////
 
-        SortByTimeAdapter adapter = new SortByTimeAdapter(timeData);
+        timeAdapter = new SortByTimeAdapter(timeData);
         View view = inflater.inflate(R.layout.fragment_sort_by_time, container, false);
         listView = (ListView) view.findViewById(R.id.list_view_time);
-        listView.setAdapter(adapter);
+        listView.setAdapter(timeAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

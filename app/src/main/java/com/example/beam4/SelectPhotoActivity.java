@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -169,6 +170,11 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
                 if(checkedPhotoList.get(i) == false){
                     unselectedPhoto = photoGroup.get(i);
                     unselectedPhotoGroup.add(unselectedPhoto);
+                    for(int j=0; j<photoFileClass.photoFileArrayList.size(); j++){
+                        if(unselectedPhoto == photoFileClass.photoFileArrayList.get(j)){
+                            photoFileClass.photoFileArrayList.remove(j);
+                        }
+                    }
                 } else{
                     selectedPhoto = photoGroup.get(i);
                     selectedPhotoGroup.add(selectedPhoto);
@@ -207,6 +213,9 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
             }
 
             adapter.notifyDataSetChanged();
+            SortByTimeFragment.timeAdapter.notifyDataSetChanged();
+            Log.i(this.getClass().getName(),"데이터 전송 : 바뀌었다고 알림      =    ");
+
         }
     }
 
