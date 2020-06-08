@@ -14,6 +14,8 @@ import java.util.List;
 
 public class TrashCanFragmentAdapter extends BaseAdapter {
 
+    public static CheckBox image_check;
+
     private List<TrashCan> item;
     public TrashCanFragmentAdapter(List<TrashCan> item){
         this.item = item;
@@ -44,7 +46,7 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
         TrashCan L = item.get(position);
         img.setImageBitmap(L.getImage());
 
-        CheckBox image_check = (CheckBox)convertView.findViewById(R.id.circle_check);
+        image_check = (CheckBox)convertView.findViewById(R.id.circle_check);
         image_check.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
             public void onClick(View v) {

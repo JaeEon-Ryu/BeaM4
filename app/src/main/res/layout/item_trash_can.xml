@@ -23,6 +23,7 @@
         android:layout_marginRight="7dp"
         android:layout_alignParentRight="true"
         android:drawableLeft="@drawable/custom_checkbox"
+        android:visibility="invisible"
         />
 
 </RelativeLayout>

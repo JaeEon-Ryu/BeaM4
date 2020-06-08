@@ -33,11 +33,13 @@
 
                 <CheckBox
                     android:id="@+id/select_check"
-                    android:layout_width="80dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:button="@null"
+                    android:clickable="true"
                     android:layout_margin="2dp"
-                    android:background="@drawable/btn_select" />
+                    android:drawableLeft="@drawable/custom_selectbox" />
+
 
                 <Button
                     android:id="@+id/restore_btn"

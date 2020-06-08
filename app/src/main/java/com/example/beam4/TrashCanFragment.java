@@ -68,6 +68,20 @@ public class TrashCanFragment extends Fragment {
         gridView = view.findViewById(R.id.gridViewImages);
         gridView.setAdapter(adapter);
 
+        CheckBox select_check = (CheckBox)view.findViewById(R.id.select_check);
+        select_check.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (select_check.isChecked()){
+                    TrashCanFragmentAdapter.image_check.setVisibility(View.VISIBLE);
+                    //Log.i(this.getClass().getName(),"이미지체크되었음  "+ position);
+                }
+                else{
+                    TrashCanFragmentAdapter.image_check.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         // 영구삭제
         Button deletePermanently = (Button)view.findViewById(R.id.delete_permanently_btn);
         deletePermanently.setOnClickListener(new View.OnClickListener(){
@@ -83,8 +97,6 @@ public class TrashCanFragment extends Fragment {
             @Override
             public void onClick(View v) { new RestoreTask().execute(); }
         });
-
-        //CheckBox select_check = (CheckBox)view.findViewById(R.id.select_check);
 
         return view;
     }
