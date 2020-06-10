@@ -1,6 +1,7 @@
 package com.example.beam4;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
                 if (image_check.isChecked()){
                     //Log.i(this.getClass().getName(),"이미지   "+ trashFragment.trashData);
                     TrashCanFragment.checkedTrashList.set(position,true);
-                    //Log.i(this.getClass().getName(),"이미지체크되었음  "+ position);
+                    Log.i(this.getClass().getName(),"이미지체크되었음  "+ position);
                 }
                 else{
                     TrashCanFragment.checkedTrashList.set(position,false);
