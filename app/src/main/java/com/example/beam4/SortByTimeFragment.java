@@ -27,7 +27,7 @@ public class SortByTimeFragment extends Fragment {
     ArrayList<SortByTime> timeData = new ArrayList<>();
     ArrayList<Uri> photoGroup = new ArrayList<>();
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
-    String nullIndex="";
+    public static String nullIndex="";
     public static ArrayList<hourlyPhotography> timeList = new ArrayList<>();
     public static SortByTimeAdapter timeAdapter;
 
@@ -168,7 +168,8 @@ public class SortByTimeFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), SelectPhotoActivity.class);
                 intent.putExtra("index",timeData.get(position).getDate());
-                //Log.i(this.getClass().getName(),"exex      =    " + timeData.get(0));
+                //Log.i(this.getClass().getName(),"exex      =    " + timeData.get(position).getDate());
+
                 startActivity(intent);
             }
         });
