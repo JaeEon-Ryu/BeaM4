@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,6 +35,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
     private int whatPhotoPosition;
     private SelectPhotoActivityRowAdapter adapter;
     private ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
+    private Boolean isDeleted=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +101,14 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         backspace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                onBackPressed();
+                if (isDeleted){
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                    //SortByTimeFragment.timeAdapter.notifyDataSetChanged();
+                }
+                else {
+                    onBackPressed();
+                }
             }
         });
 
@@ -115,6 +121,19 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        if (isDeleted){
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
+            //SortByTimeFragment.timeAdapter.notifyDataSetChanged();
+        }
+        else {
+            onBackPressed();
+        }
+    }
+
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -197,6 +216,8 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
 
             selectedPhotoGroup.clear();
             unselectedPhotoGroup.clear();
+
+            isDeleted = true;
             return null;
         }
 
@@ -213,8 +234,8 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
             }
 
             adapter.notifyDataSetChanged();
-            SortByTimeFragment.timeAdapter.notifyDataSetChanged();
-            Log.i(this.getClass().getName(),"데이터 전송 : 바뀌었다고 알림      =    ");
+
+            //Log.i(this.getClass().getName(),"데이터 전송 : 바뀌었다고 알림      =    ");
 
         }
     }

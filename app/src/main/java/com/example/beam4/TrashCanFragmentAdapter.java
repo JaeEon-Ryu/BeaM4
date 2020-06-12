@@ -1,7 +1,6 @@
 package com.example.beam4;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,33 +47,18 @@ public class TrashCanFragmentAdapter extends BaseAdapter {
         img.setImageBitmap(L.getImage());
 
         image_check = (CheckBox)convertView.findViewById(R.id.circle_check);
-        /*image_check.setOnClickListener(new CheckBox.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (image_check.isChecked()){
-                    //Log.i(this.getClass().getName(),"이미지   "+ trashFragment.trashData);
-                    TrashCanFragment.checkedTrashList.set(position,true);
-                    Log.i(this.getClass().getName(),"이미지 체크되었음  "+ position);
-                }
-                else{
-                    TrashCanFragment.checkedTrashList.set(position,false);
-                    Log.i(this.getClass().getName(),"이미지 체크해제 되었음  "+ position);
-                }
-            }
-        });*/
-
         image_check.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (L.getIsChecked()){
                     L.setIsChecked(false);
                     TrashCanFragment.checkedTrashList.set(position,false);
-                    Log.i(this.getClass().getName(),"이미지 체크 해제되었음  "+ position);
+                    //Log.i(this.getClass().getName(),"이미지 체크 해제되었음  "+ position);
                 }
                 else{
                     L.setIsChecked(true);
                     TrashCanFragment.checkedTrashList.set(position,true);
-                    Log.i(this.getClass().getName(),"이미지 체크 되었음  "+ position);
+                    //Log.i(this.getClass().getName(),"이미지 체크 되었음  "+ position);
                 }
             }
         });
