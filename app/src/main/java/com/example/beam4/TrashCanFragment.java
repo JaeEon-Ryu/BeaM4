@@ -58,7 +58,7 @@ public class TrashCanFragment extends Fragment {
             for (int i = 0; i < trashUri.size(); i++) {
                 Bitmap img = setBitmap(photoFileClass.trashFileArrayList.get(i));
                 checkedTrashList.add(false);
-                trashData.add(new TrashCan(img));
+                trashData.add(new TrashCan(img,false));
             }
         }
 
@@ -154,7 +154,7 @@ public class TrashCanFragment extends Fragment {
                 for (int i = 0; i < unselectedPhotoGroup.size(); i++) {
                     Bitmap img = setBitmap(unselectedPhotoGroup.get(i));
                     photoFileClass.trashFileArrayList.add(unselectedPhotoGroup.get(i));
-                    trashData.add(new TrashCan(img));
+                    trashData.add(new TrashCan(img,false));
                     checkedTrashList.add(false);
                 }
             }
@@ -206,7 +206,7 @@ public class TrashCanFragment extends Fragment {
                 for (int i = 0; i < unselectedPhotoGroup.size(); i++) {
                     Bitmap img = setBitmap(unselectedPhotoGroup.get(i));
                     photoFileClass.trashFileArrayList.add(unselectedPhotoGroup.get(i));
-                    trashData.add(new TrashCan(img));
+                    trashData.add(new TrashCan(img,false));
                     checkedTrashList.add(false);
                 }
             }
