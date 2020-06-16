@@ -201,9 +201,10 @@ public class SortByImageFragment extends Fragment {
 
                 boolean matchResult = false;
                 // 피처 매칭 실행
-                if(false){
+                if(!histResult){
 
-                    ORB detector = ORB.create();
+                    ORB detector1 = ORB.create();
+                    ORB detector2 = ORB.create();
 
                     // keypoint 와 description 생성
                     MatOfKeyPoint mainKeyPoint = new MatOfKeyPoint();
@@ -211,24 +212,27 @@ public class SortByImageFragment extends Fragment {
                     Mat mainDescriptor = new Mat();
                     Mat subDescriptor = new Mat();
 
-                    detector.detectAndCompute(firstMat, new Mat(), mainKeyPoint, mainDescriptor);
-                    detector.detectAndCompute(comparedMat, new Mat(), subKeyPoint, subDescriptor);
+                    detector1.detectAndCompute(firstMat, new Mat(), mainKeyPoint, mainDescriptor);
+                    detector2.detectAndCompute(comparedMat, new Mat(), subKeyPoint, subDescriptor);
+                    Log.d("check descriptor", "onCreateView: " + mainDescriptor + "  " + subDescriptor);
+                    if (mainDescriptor.isContinuous() == true && subDescriptor.isContinuous() == true ) {
+                        // Matcher
+                        DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);
+                        matcher.train();
 
-                    // Matcher
-                    DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);;
+                        MatOfDMatch matches = new MatOfDMatch();
+                        matcher.match(mainDescriptor, subDescriptor, matches);
 
-                    MatOfDMatch matches = new MatOfDMatch();
-                    matcher.match(mainDescriptor, subDescriptor, matches);
-
-                    List<DMatch> dMatchList = matches.toList();
-                    LinkedList<DMatch> good_matches = new LinkedList<DMatch>();
-                    for (int j = 0; j < dMatchList.size(); j++) {
-                        if(dMatchList.get(j).distance <= 40){
-                            good_matches.add(dMatchList.get(j));
+                        List<DMatch> dMatchList = matches.toList();
+                        LinkedList<DMatch> good_matches = new LinkedList<DMatch>();
+                        for (int j = 0; j < dMatchList.size(); j++) {
+                            if (dMatchList.get(j).distance <= 40) {
+                                good_matches.add(dMatchList.get(j));
+                            }
                         }
-                    }
-                    if(good_matches.size() > 20){
-                        matchResult = true;
+                        if (good_matches.size() > SimilaritySetter.getSimilarity()) {
+                            matchResult = true;
+                        }
                     }
                 }
 

@@ -172,7 +172,6 @@ public class SortByTimeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         return view;
     }
 
