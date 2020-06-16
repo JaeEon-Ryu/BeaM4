@@ -59,6 +59,7 @@ public class SortByImageFragment extends Fragment {
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<SortByImage> sortByImages = new ArrayList<>();
 
+
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -92,10 +93,173 @@ public class SortByImageFragment extends Fragment {
         //setBitmapArrayList(photoGroup);
 
         // 유사도별 사진 나누기
-        new sortbyImageOpenCV().execute(photoGroup);
+        // new sortbyImageOpenCV().execute(photoGroup);
 
-        ArrayList<ArrayList<Uri>> imgUriArrayList = new ArrayList<>();
-        imgUriArrayList.addAll(photoFileClass.openCVFileArrayList);
+        ArrayList<ArrayList<Uri>> resultArrayList = new ArrayList<ArrayList<Uri>>();
+        ArrayList<Uri> uriArrayList = new ArrayList<>();
+
+        uriArrayList.addAll(photoGroup);
+
+        // openCV 유사도 체크
+        ArrayList<Mat> matArrayList = new ArrayList<Mat>();
+        ArrayList<String> pathArrayList = new ArrayList<>();
+        for (int i = 0; i < uriArrayList.size(); i++){
+            String path = getImagePathFromURI(uriArrayList.get(i));
+            pathArrayList.add(path);
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        for (int i = 0; i< pathArrayList.size(); i++){
+            bitmapArrayList.add(BitmapFactory.decodeFile(pathArrayList.get(i), options));
+        }
+        for(int i = 0; i < bitmapArrayList.size(); i++){
+            Mat mat = new Mat();
+            Utils.bitmapToMat(bitmapArrayList.get(i), mat);
+            matArrayList.add(mat);
+        }
+
+        // while(리스트가 비었는가?)
+        while(!matArrayList.isEmpty()){
+            ArrayList<Uri> resultUriArrayList = new ArrayList<>();
+            ArrayList<Uri> notGoodResultUriArrayList = new ArrayList<>();
+            ArrayList<Mat> notSameMatArrayList = new ArrayList<>();
+            // matArrayList 첫번째 mat을 firstMat으로 선정
+            Mat firstMat = matArrayList.get(0);
+            // 첫번재 mat의 uri를 resultUriArrayList에 넣음
+            resultUriArrayList.add(uriArrayList.get(0));
+            Log.d("check the process","checking openCV matching is working");
+            for (int i = 1; i < matArrayList.size(); i++) {
+                Log.d("check the process","checking openCV matching is working " + i);
+                // matArrayList 1 ~ matArrayList.size 까지 비교하기
+                Mat comparedMat = matArrayList.get(i);
+                // 히스토그램 매칭 실행
+                Mat hsvImg1 = new Mat();
+                Mat hsvImg2 = new Mat();
+
+                Mat histFirstMat = firstMat.clone();
+                Mat histComparedMat = comparedMat.clone();
+
+                Imgproc.cvtColor(histFirstMat, hsvImg1, Imgcodecs.IMREAD_ANYCOLOR);
+                Imgproc.cvtColor(histComparedMat, hsvImg2, Imgcodecs.IMREAD_ANYCOLOR);
+
+                List<Mat> matList1 = new ArrayList<Mat>();
+                List<Mat> matList2 = new ArrayList<Mat>();
+
+                matList1.add(hsvImg1);
+                matList2.add(hsvImg2);
+
+                MatOfFloat range = new MatOfFloat(0,255);
+                MatOfInt histSize = new MatOfInt(50);
+                MatOfInt channels = new MatOfInt((0));
+
+                Mat histogram1 = new Mat();
+                Mat histogram2 = new Mat();
+
+                Imgproc.calcHist(matList1, channels, new Mat(), histogram1, histSize, range);
+                Imgproc.calcHist(matList2, channels, new Mat(), histogram2, histSize, range);
+
+                Core.normalize(histogram1, histogram1, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+                Core.normalize(histogram2, histogram2, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+
+                /*
+                 * correlation: the higher the metric, the more accurate the match ">0.9"
+                 * chi_square: the lower the metric, the more accurate the match "<0.1"
+                 * intersection: the higher the metric, the more accurate the match ">1.5"
+                 * bhattacharyya: the lower the metric, the more accurate the match "<0.3"
+                 * */
+                double correlation, chi_square, intersection, bhattacharyya;
+                correlation = Imgproc.compareHist(histogram1, histogram2, 0);
+                chi_square = Imgproc.compareHist(histogram1, histogram2, 1);
+                intersection = Imgproc.compareHist(histogram1, histogram2, 2);
+                bhattacharyya = Imgproc.compareHist(histogram1, histogram2, 3);
+
+                int count = 0;
+                boolean histResult = false;
+
+                if(correlation > 0.9) count++;
+                if(chi_square < 0.1) count++;
+                if(intersection > 1.5) count++;
+                if(bhattacharyya < 0.3) count++;
+
+                // 히스토그램 매칭 결과 확인
+                if(count >= 3){
+                    histResult = true;
+                }
+
+                hsvImg1.release();
+                hsvImg2.release();
+
+                histFirstMat.release();
+                histComparedMat.release();
+
+                histogram1.release();
+                histogram2.release();
+
+                matList1.clear();
+                matList2.clear();
+
+
+                boolean matchResult = false;
+                // 피처 매칭 실행
+                if(false){
+
+                    ORB detector = ORB.create();
+
+                    // keypoint 와 description 생성
+                    MatOfKeyPoint mainKeyPoint = new MatOfKeyPoint();
+                    MatOfKeyPoint subKeyPoint = new MatOfKeyPoint();
+                    Mat mainDescriptor = new Mat();
+                    Mat subDescriptor = new Mat();
+
+                    detector.detectAndCompute(firstMat, new Mat(), mainKeyPoint, mainDescriptor);
+                    detector.detectAndCompute(comparedMat, new Mat(), subKeyPoint, subDescriptor);
+
+                    // Matcher
+                    DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);;
+
+                    MatOfDMatch matches = new MatOfDMatch();
+                    matcher.match(mainDescriptor, subDescriptor, matches);
+
+                    List<DMatch> dMatchList = matches.toList();
+                    LinkedList<DMatch> good_matches = new LinkedList<DMatch>();
+                    for (int j = 0; j < dMatchList.size(); j++) {
+                        if(dMatchList.get(j).distance <= 40){
+                            good_matches.add(dMatchList.get(j));
+                        }
+                    }
+                    if(good_matches.size() > 20){
+                        matchResult = true;
+                    }
+                }
+
+                // 결과로 리스트를 분류
+                if(histResult || (!histResult && matchResult)) {
+                    resultUriArrayList.add(uriArrayList.get(i));
+                } else{
+                    notGoodResultUriArrayList.add(uriArrayList.get(i));
+                    notSameMatArrayList.add(comparedMat);
+                }
+                // comparedMat.release();
+            }
+            Log.d("check the process","checking openCV matching is done " );
+            // matArrayList 초기화 및 notSameMatArrayList로 갱신
+
+            matArrayList = notSameMatArrayList;
+            Log.d("check the process","checking resultUriArrayList "  + resultUriArrayList);
+            if(resultUriArrayList.size() >= 2){
+                resultArrayList.add(resultUriArrayList);
+            }
+            Log.d("check the process","checking resultUriArrayList "  + resultArrayList);
+
+            uriArrayList = notGoodResultUriArrayList;
+            firstMat.release();
+        }
+        Log.d("check the process","checking resultArrayList "  + resultArrayList);
+
+        photoFileClass.openCVFileArrayList = resultArrayList;
+        ArrayList<ArrayList<Uri>> imgUriArrayList;
+        imgUriArrayList = photoFileClass.openCVFileArrayList;
+        Log.d(TAG, "check OpenCVFileArrayLsit: " + imgUriArrayList);
         Uri[] uriDataImg = new Uri[11];
         Drawable plusOn;
 
@@ -114,204 +278,53 @@ public class SortByImageFragment extends Fragment {
             }
             SortByImage sortByImage = new SortByImage();
             sortByImage.setImage1(uriDataImg[0]);
-            sortByImage.setImage1(uriDataImg[1]);
-            sortByImage.setImage1(uriDataImg[2]);
-            sortByImage.setImage1(uriDataImg[3]);
-            sortByImage.setImage1(uriDataImg[4]);
-            sortByImage.setImage1(uriDataImg[5]);
-            sortByImage.setImage1(uriDataImg[6]);
-            sortByImage.setImage1(uriDataImg[7]);
-            sortByImage.setImage1(uriDataImg[8]);
-            sortByImage.setImage1(uriDataImg[9]);
-            sortByImage.setImage1(uriDataImg[10]);
-            sortByImage.setImage1(uriDataImg[11]);
+            sortByImage.setImage2(uriDataImg[1]);
+            sortByImage.setImage3(uriDataImg[2]);
+            sortByImage.setImage4(uriDataImg[3]);
+            sortByImage.setImage5(uriDataImg[4]);
+            sortByImage.setImage6(uriDataImg[5]);
+            sortByImage.setImage7(uriDataImg[6]);
+            sortByImage.setImage8(uriDataImg[7]);
+            sortByImage.setImage9(uriDataImg[8]);
+            sortByImage.setImage10(uriDataImg[9]);
+            sortByImage.setImage11(uriDataImg[10]);
             sortByImage.setImage12(plusOn);
             sortByImages.add(sortByImage);
         }
 
-        SortByImageAdapter sortByImageAdapter = new SortByImageAdapter(sortByImages);
+        SortByImageAdapter sortByImageAdapter = new SortByImageAdapter(getContext(), sortByImages);
         View view = inflater.inflate(R.layout.fragment_sort_by_image, container, false);
         ListView listView = view.findViewById(R.id.list_view_image);
         listView.setAdapter(sortByImageAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), SelectPhotoActivity.class);
+                intent.putExtra("indexFromSortByImageFragment", position);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 
-    private void setBitmapArrayList(ArrayList<Uri> photoUriGroup) {
-        bitmapArrayList.clear();
-        for (Uri uri : photoUriGroup) {
-            Bitmap bmp = null;
-            try {
-                bmp = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(this.getActivity()).getContentResolver(), uri);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 1000, 1000, false);
-                int degree = RotateBmpClass.GetExifOrientation(uri.getPath());
-                Bitmap rotatedBitmap = RotateBmpClass.GetRotatedBitmap(scaledBitmap, degree);
-                bmp.recycle();
-                bmp = rotatedBitmap;
-                bitmapArrayList.add(bmp);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private Bitmap setBitmap(Uri uri) {
+        Bitmap bmp = null;
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), uri);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 250, false);
+            int degree = RotateBmpClass.GetExifOrientation(uri.getPath());
+            Bitmap rotatedBitmap = RotateBmpClass.GetRotatedBitmap(scaledBitmap, degree);
+            bmp.recycle();
+            bmp = rotatedBitmap;
+            return bmp;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return bmp;
     }
 
-    private class sortbyImageOpenCV extends AsyncTask<ArrayList<Uri>, Void, ArrayList<ArrayList<Uri>>>{
-
-        @Override
-        protected ArrayList<ArrayList<Uri>> doInBackground(ArrayList<Uri>... arrayLists) {
-            ArrayList<ArrayList<Uri>> resultArrayList = new ArrayList();
-
-            ArrayList<Uri> uriArrayList = new ArrayList<>();
-            ArrayList<Uri> resultUriArrayList = new ArrayList<>();
-            ArrayList<Uri> notGoodResultUriArrayList = new ArrayList<>();
-            ArrayList<Mat> notSameMatArrayList = new ArrayList<>();
-
-            uriArrayList.addAll(arrayLists[0]);
-
-            // openCV 유사도 체크
-            ArrayList<Mat> matArrayList = new ArrayList<Mat>();
-            ArrayList<String> pathArrayList = new ArrayList<>();
-            for (int i = 0; i < uriArrayList.size(); i++){
-                String path = getImagePathFromURI(uriArrayList.get(i));
-                pathArrayList.add(path);
-            }
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 4;
-            for (int i = 0; i< pathArrayList.size(); i++){
-                bitmapArrayList.add(BitmapFactory.decodeFile(pathArrayList.get(i), options));
-            }
-            for(int i = 0; i < bitmapArrayList.size(); i++){
-                Mat mat = new Mat();
-                Utils.bitmapToMat(bitmapArrayList.get(i), mat);
-                matArrayList.add(mat);
-            }
-
-            // while(리스트가 비었는가?)
-            while(!matArrayList.isEmpty()){;
-                // resultBitmapArrayList 첫번째 값은 matArrayList 첫번째 값을
-                // bitmap 으로 바꾸어 넣음
-                Mat firstMat = matArrayList.get(0);
-                resultUriArrayList.add(uriArrayList.get(0));
-                Log.d("check the process","checking openCV matching is working");
-                for (int i = 1; i < matArrayList.size(); i++) {
-                    Log.d("check the process","checking openCV matching is working " + i);
-                    Mat comparedMat = matArrayList.get(i);
-                    // 히스토그램 매칭 실행
-                    Mat hsvImg1 = new Mat();
-                    Mat hsvImg2 = new Mat();
-
-                    Mat histFirstMat = firstMat.clone();
-                    Mat histComparedMat = comparedMat.clone();
-
-                    Imgproc.cvtColor(histFirstMat, hsvImg1, Imgcodecs.IMREAD_ANYCOLOR);
-                    Imgproc.cvtColor(histComparedMat, hsvImg2, Imgcodecs.IMREAD_ANYCOLOR);
-
-                    List<Mat> matList1 = new ArrayList<Mat>();
-                    List<Mat> matList2 = new ArrayList<Mat>();
-
-                    matList1.add(hsvImg1);
-                    matList2.add(hsvImg2);
-
-                    MatOfFloat range = new MatOfFloat(0,255);
-                    MatOfInt histSize = new MatOfInt(50);
-                    MatOfInt channels = new MatOfInt((0));
-
-                    Mat histogram1 = new Mat();
-                    Mat histogram2 = new Mat();
-
-                    Imgproc.calcHist(matList1, channels, new Mat(), histogram1, histSize, range);
-                    Imgproc.calcHist(matList2, channels, new Mat(), histogram2, histSize, range);
-
-                    Core.normalize(histogram1, histogram1, 0, 1, Core.NORM_MINMAX, -1, new Mat());
-                    Core.normalize(histogram2, histogram2, 0, 1, Core.NORM_MINMAX, -1, new Mat());
-
-                    /*
-                     * correlation: the higher the metric, the more accurate the match ">0.9"
-                     * chi_square: the lower the metric, the more accurate the match "<0.1"
-                     * intersection: the higher the metric, the more accurate the match ">1.5"
-                     * bhattacharyya: the lower the metric, the more accurate the match "<0.3"
-                     * */
-                    double correlation, chi_square, intersection, bhattacharyya;
-                    correlation = Imgproc.compareHist(histogram1, histogram2, 0);
-                    chi_square = Imgproc.compareHist(histogram1, histogram2, 1);
-                    intersection = Imgproc.compareHist(histogram1, histogram2, 2);
-                    bhattacharyya = Imgproc.compareHist(histogram1, histogram2, 3);
-
-                    int count = 0;
-                    boolean histResult = false;
-
-                    if(correlation > 0.9) count++;
-                    if(chi_square < 0.1) count++;
-                    if(intersection > 1.5) count++;
-                    if(bhattacharyya < 0.3) count++;
-
-                    // 히스토그램 매칭 결과 확인
-                    if(count >= 3){
-                        histResult = true;
-                    }
-
-
-                    boolean matchResult = false;
-                    // 피처 매칭 실행
-                    if(false){
-
-                        ORB detector = ORB.create();
-
-                        // keypoint 와 description 생성
-                        MatOfKeyPoint mainKeyPoint = new MatOfKeyPoint();
-                        MatOfKeyPoint subKeyPoint = new MatOfKeyPoint();
-                        Mat mainDescriptor = new Mat();
-                        Mat subDescriptor = new Mat();
-
-                        detector.detectAndCompute(firstMat, new Mat(), mainKeyPoint, mainDescriptor);
-                        detector.detectAndCompute(comparedMat, new Mat(), subKeyPoint, subDescriptor);
-
-                        // Matcher
-                        DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);;
-
-                        MatOfDMatch matches = new MatOfDMatch();
-                        matcher.match(mainDescriptor, subDescriptor, matches);
-
-                        List<DMatch> dMatchList = matches.toList();
-                        LinkedList<DMatch> good_matches = new LinkedList<DMatch>();
-                        for (int j = 0; j < dMatchList.size(); j++) {
-                            if(dMatchList.get(j).distance <= 40){
-                                good_matches.add(dMatchList.get(j));
-                            }
-                        }
-                        if(good_matches.size() > 20){
-                            matchResult = true;
-                        }
-                    }
-
-                    // 결과로 리스트를 분류
-                    Mat mat = matArrayList.get(i);
-                    if(histResult || (!histResult && matchResult)) {
-                        resultUriArrayList.add(uriArrayList.get(i));
-                    } else{
-                        notGoodResultUriArrayList.add(uriArrayList.get(i));
-                        notSameMatArrayList.add(mat);
-                    }
-                    mat.release();
-                }
-                Log.d("check the process","checking openCV matching is done " );
-                // matArrayList 초기화 및 notSameMatArrayList로 갱신
-                matArrayList.clear();
-                matArrayList.addAll(notSameMatArrayList);
-                resultArrayList.add(resultUriArrayList);
-                resultUriArrayList.clear();
-                notSameMatArrayList.clear();
-                uriArrayList.clear();
-                uriArrayList.addAll(notGoodResultUriArrayList);
-            }
-            return resultArrayList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<ArrayList<Uri>> arrayLists) {
-            photoFileClass.openCVFileArrayList.addAll(arrayLists);
-        }
-    }
 
     private String getImagePathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Images.Media.DATA};

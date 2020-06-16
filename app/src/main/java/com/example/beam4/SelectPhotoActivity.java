@@ -50,33 +50,44 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
 
         Intent intent = getIntent();
         String dateTime = intent.getStringExtra("index");
-        Log.i(this.getClass().getName(),"dateTime =   "+dateTime);
+        int indexFromSortByImageFragment = intent.getExtras().getInt("indexFromSortByImageFragment");
 
-        if(dateTime.equals("시간 정보가 없습니다.")){
-            String[] IndexArray = SortByTimeFragment.nullIndex.split(",");
-            for (int i = 0; i < IndexArray.length; i++) {
-                int idx = Integer.parseInt(IndexArray[i]);
-                photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
+//        if(dateTime != null){
+//            Log.i(this.getClass().getName(),"dateTime =   "+dateTime);
+//
+//            if(dateTime.equals("시간 정보가 없습니다.")){
+//                String[] IndexArray = SortByTimeFragment.nullIndex.split(",");
+//                for (int i = 0; i < IndexArray.length; i++) {
+//                    int idx = Integer.parseInt(IndexArray[i]);
+//                    photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
+//                    checkedPhotoList.add(false);
+//                }
+//            }
+//            else{
+//                for(hourlyPhotography s : SortByTimeFragment.timeList) {
+//                    if (s.getTimeString().equals(dateTime)) {
+//                        String[] IndexArray = s.getTimeIndex().split(",");
+//                        for (int i = 0; i < IndexArray.length; i++) {
+//                            int idx = Integer.parseInt(IndexArray[i]);
+//                            photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
+//                            checkedPhotoList.add(false);
+//                        }
+//                        break;
+//                    }
+//                }
+//            }
+//        } else if(indexFromSortByImageFragment != -1){
+//            ArrayList<Uri> uriArrayList = photoFileClass.openCVFileArrayList.get(indexFromSortByImageFragment);
+//            for (int i = 0; i<uriArrayList.size(); i++){
+//                photoGroup.add(uriArrayList.get(i));
+//                checkedPhotoList.add(false);
+//            }
+//        }
+        ArrayList<Uri> uriArrayList = photoFileClass.openCVFileArrayList.get(indexFromSortByImageFragment);
+            for (int i = 0; i<uriArrayList.size(); i++){
+                photoGroup.add(uriArrayList.get(i));
                 checkedPhotoList.add(false);
             }
-        }
-        else{
-            for(hourlyPhotography s : SortByTimeFragment.timeList) {
-                if (s.getTimeString().equals(dateTime)) {
-                    String[] IndexArray = s.getTimeIndex().split(",");
-                    for (int i = 0; i < IndexArray.length; i++) {
-                        int idx = Integer.parseInt(IndexArray[i]);
-                        photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
-                        checkedPhotoList.add(false);
-                    }
-                    break;
-                }
-            }
-        }
-
-
-
-
         setBitmapArrayList(photoGroup);
 
         bigImage = findViewById(R.id.bigImage);

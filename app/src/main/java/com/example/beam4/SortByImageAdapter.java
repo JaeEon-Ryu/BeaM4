@@ -1,8 +1,12 @@
 package com.example.beam4;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +17,18 @@ import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.IOException;
 import java.util.List;
+
 
 public class SortByImageAdapter extends BaseAdapter {
 
     private List<SortByImage> item;
-    public SortByImageAdapter(List<SortByImage> item){
+    private Context context;
+
+    public SortByImageAdapter(Context context, List<SortByImage> item) {
         this.item = item;
+        this.context = context;
     }
 
     @Override
@@ -28,7 +37,9 @@ public class SortByImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) { return item.get(position); }
+    public Object getItem(int position) {
+        return item.get(position);
+    }
 
     @Override
     public long getItemId(int position) {
@@ -73,4 +84,19 @@ public class SortByImageAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private Bitmap setBitmap(Uri uri) {
+        Bitmap bmp = null;
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 250, false);
+            int degree = RotateBmpClass.GetExifOrientation(uri.getPath());
+            Bitmap rotatedBitmap = RotateBmpClass.GetRotatedBitmap(scaledBitmap, degree);
+            bmp.recycle();
+            bmp = rotatedBitmap;
+            return bmp;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmp;
+    }
 }
