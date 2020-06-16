@@ -57,7 +57,6 @@ public class SortByImageFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -311,7 +310,6 @@ public class SortByImageFragment extends Fragment {
         }
         return bmp;
     }
-
 
     private String getImagePathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
