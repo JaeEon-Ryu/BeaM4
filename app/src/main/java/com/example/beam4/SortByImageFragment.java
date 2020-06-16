@@ -47,7 +47,6 @@ public class SortByImageFragment extends Fragment {
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
-
         if(!OpenCVLoader.initDebug()){
             Log.d(TAG, "OpenCV is not loaded!");
         } else {
