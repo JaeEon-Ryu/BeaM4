@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
@@ -101,19 +102,15 @@ public class SplashActivity extends AppCompatActivity implements ActivityCompat.
         protected ArrayList<Uri> doInBackground(String... path) {
             File directory = new File(path[0]);
             File[] files = directory.listFiles(
-
-                    new FilenameFilter() {
-                        public boolean accept(File dir, String filename) {
-                            Boolean bOK = false;
-                            if(filename.toLowerCase().endsWith(".png")) bOK = true;
-                            if(filename.toLowerCase().endsWith(".9.png")) bOK = true;
-                            if(filename.toLowerCase().endsWith(".gif")) bOK = true;
-                            if(filename.toLowerCase().endsWith(".jpg")) bOK = true;
-                            if(filename.toLowerCase().endsWith(".JPG")) bOK = true;
-                            return bOK;
-                        }
+                    (dir, filename) -> {
+                        Boolean bOK = false;
+                        if(filename.toLowerCase().endsWith(".png")) bOK = true;
+                        if(filename.toLowerCase().endsWith(".9.png")) bOK = true;
+                        if(filename.toLowerCase().endsWith(".gif")) bOK = true;
+                        if(filename.toLowerCase().endsWith(".jpg")) bOK = true;
+                        if(filename.toLowerCase().endsWith(".JPG")) bOK = true;
+                        return bOK;
                     });
-
 
             ArrayList<Uri> photoFileArrayList = new ArrayList<>();
 

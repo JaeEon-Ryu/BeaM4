@@ -36,7 +36,6 @@ public class SortByTimeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -190,7 +189,6 @@ public class SortByTimeFragment extends Fragment {
                 bmp.recycle();
                 bmp = rotatedBitmap;
                 bitmapArrayList.add(bmp);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

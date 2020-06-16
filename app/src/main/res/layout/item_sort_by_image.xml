@@ -8,19 +8,6 @@
     android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/date_sort_by_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="유사도별 사진"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-
-        />
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"

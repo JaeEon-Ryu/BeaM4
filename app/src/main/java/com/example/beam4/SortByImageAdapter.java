@@ -1,24 +1,18 @@
-/*
 package com.example.beam4;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.net.Uri;
+
 import android.os.Build;
-import android.provider.MediaStore;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+
+
 import androidx.annotation.RequiresApi;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SortByImageAdapter extends BaseAdapter {
@@ -63,21 +57,20 @@ public class SortByImageAdapter extends BaseAdapter {
 
         SortByImage L = item.get(position);
 
-        img1.setImageBitmap(L.getImage1());
-        img2.setImageBitmap(L.getImage2());
-        img3.setImageBitmap(L.getImage3());
-        img4.setImageBitmap(L.getImage4());
-        img5.setImageBitmap(L.getImage5());
-        img6.setImageBitmap(L.getImage6());
-        img7.setImageBitmap(L.getImage7());
-        img8.setImageBitmap(L.getImage8());
-        img9.setImageBitmap(L.getImage9());
-        img8.setImageBitmap(L.getImage10());
-        img9.setImageBitmap(L.getImage11());
-        img10.setImageDrawable(L.getImage12());
+        img1.setImageURI(L.getImage1());
+        img2.setImageURI(L.getImage2());
+        img3.setImageURI(L.getImage3());
+        img4.setImageURI(L.getImage4());
+        img5.setImageURI(L.getImage5());
+        img6.setImageURI(L.getImage6());
+        img7.setImageURI(L.getImage7());
+        img8.setImageURI(L.getImage8());
+        img9.setImageURI(L.getImage9());
+        img10.setImageURI(L.getImage10());
+        img11.setImageURI(L.getImage11());
+        img12.setImageDrawable(L.getImage12());
 
         return convertView;
     }
 
 }
-*/
