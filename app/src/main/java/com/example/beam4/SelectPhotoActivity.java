@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,6 +36,8 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
     private SelectPhotoActivityRowAdapter adapter;
     private ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     private Boolean isDeleted=false;
+    private Boolean timeFlag = false;
+    private Boolean imageFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,56 +50,60 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         unselectedPhotoGroup.clear();
 
         Intent intent = getIntent();
+//        Log.i(this.getClass().getName(),"지금inent 들어온 것 =   "+ intent.getStringExtra("index"));
+//        Log.i(this.getClass().getName(),"지금inent 들어온 것 =   "+ intent.getExtras().getInt("indexFromSortByImageFragment"));
         String dateTime = intent.getStringExtra("index");
         int indexFromSortByImageFragment = intent.getExtras().getInt("indexFromSortByImageFragment");
 
-//        if(dateTime != null){
-//            Log.i(this.getClass().getName(),"dateTime =   "+dateTime);
-//
-//            if(dateTime.equals("시간 정보가 없습니다.")){
-//                String[] IndexArray = SortByTimeFragment.nullIndex.split(",");
-//                for (int i = 0; i < IndexArray.length; i++) {
-//                    int idx = Integer.parseInt(IndexArray[i]);
-//                    photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
-//                    checkedPhotoList.add(false);
-//                }
-//            }
-//            else{
-//                for(hourlyPhotography s : SortByTimeFragment.timeList) {
-//                    if (s.getTimeString().equals(dateTime)) {
-//                        String[] IndexArray = s.getTimeIndex().split(",");
-//                        for (int i = 0; i < IndexArray.length; i++) {
-//                            int idx = Integer.parseInt(IndexArray[i]);
-//                            photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
-//                            checkedPhotoList.add(false);
-//                        }
-//                        break;
-//                    }
-//                }
-//            }
-//        } else if(indexFromSortByImageFragment != -1){
-//            ArrayList<Uri> uriArrayList = photoFileClass.openCVFileArrayList.get(indexFromSortByImageFragment);
-//            for (int i = 0; i<uriArrayList.size(); i++){
-//                photoGroup.add(uriArrayList.get(i));
-//                checkedPhotoList.add(false);
-//            }
-//        }
-        ArrayList<Uri> uriArrayList = photoFileClass.openCVFileArrayList.get(indexFromSortByImageFragment);
+        // 어디서 왔는지 구별하기 위한 요소
+        if(dateTime != null){
+            timeFlag = true;
+        }
+        else{
+            imageFlag = true;
+        }
+
+
+        if(timeFlag){   // SortByTimeFragment 에서 넘어오 데이터들
+            if(dateTime.equals("시간 정보가 없습니다.")){
+                String[] IndexArray = SortByTimeFragment.nullIndex.split(",");
+                for (int i = 0; i < IndexArray.length; i++) {
+                    int idx = Integer.parseInt(IndexArray[i]);
+                    photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
+                    checkedPhotoList.add(false);
+                }
+            }
+            else{
+                for(hourlyPhotography s : SortByTimeFragment.timeList) {
+                    if (s.getTimeString().equals(dateTime)) {
+                        String[] IndexArray = s.getTimeIndex().split(",");
+                        for (int i = 0; i < IndexArray.length; i++) {
+                            int idx = Integer.parseInt(IndexArray[i]);
+                            photoGroup.add(photoFileClass.photoFileArrayList.get(idx));
+                            checkedPhotoList.add(false);
+                        }
+                        break;
+                    }
+                }
+            }
+        } else if(indexFromSortByImageFragment != -1){ // SortByImage에서 넘어온 데이터들
+            ArrayList<Uri> uriArrayList = photoFileClass.openCVFileArrayList.get(indexFromSortByImageFragment);
             for (int i = 0; i<uriArrayList.size(); i++){
                 photoGroup.add(uriArrayList.get(i));
                 checkedPhotoList.add(false);
             }
+        }
+
+
         setBitmapArrayList(photoGroup);
 
         bigImage = findViewById(R.id.bigImage);
         bigImage.setAdjustViewBounds(true);
 
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         linearLayoutManager.setItemPrefetchEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.select_photo_group);
-
         recyclerView.setLayoutManager(linearLayoutManager);
 
         adapter = new SelectPhotoActivityRowAdapter(com.example.beam4.SelectPhotoActivity.this, bitmapArrayList);
@@ -150,12 +155,15 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
     @Override
     public void onBackPressed() {
         if (isDeleted){
+            SortByTimeFragment.timeAdapter.notifyDataSetChanged();
+            SortByImageFragment.sortByImageAdapter.notifyDataSetChanged();
+
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
-            //SortByTimeFragment.timeAdapter.notifyDataSetChanged();
+
         }
         else {
-            onBackPressed();
+            super.onBackPressed();
         }
     }
 

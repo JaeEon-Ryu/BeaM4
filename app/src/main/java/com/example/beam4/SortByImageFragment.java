@@ -1,31 +1,22 @@
 package com.example.beam4;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.content.Context;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -41,24 +32,17 @@ import org.opencv.features2d.ORB;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 public class SortByImageFragment extends Fragment {
     private static final String TAG = "OcvTest1";
     ArrayList<Uri> photoGroup = new ArrayList<>();
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<SortByImage> sortByImages = new ArrayList<>();
-
+    public static SortByImageAdapter sortByImageAdapter;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -296,7 +280,7 @@ public class SortByImageFragment extends Fragment {
             sortByImages.add(sortByImage);
         }
 
-        SortByImageAdapter sortByImageAdapter = new SortByImageAdapter(getContext(), sortByImages);
+        sortByImageAdapter = new SortByImageAdapter(getContext(), sortByImages);
         View view = inflater.inflate(R.layout.fragment_sort_by_image, container, false);
         ListView listView = view.findViewById(R.id.list_view_image);
         listView.setAdapter(sortByImageAdapter);
