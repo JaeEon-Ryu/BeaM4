@@ -1,7 +1,10 @@
 package com.example.beam4;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,13 +14,24 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.opencv.android.Utils;
+import org.opencv.core.DMatch;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfDMatch;
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.features2d.DescriptorMatcher;
+import org.opencv.features2d.ORB;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class SelectPhotoActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -38,6 +52,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
     private Boolean isDeleted=false;
     private Boolean timeFlag = false;
     private Boolean imageFlag = false;
+    private Button recommendBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +165,14 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
                 new DeletePhotoTask().execute();
             }
         });
+        // 추천 버튼
+        recommendBtn = findViewById(R.id.btn_recommend);
+        recommendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RecommandPhotoTask().execute();
+            }
+        });
     }
 
     @Override
@@ -237,6 +260,20 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
             checkedPhotoList.clear();
 
             photoGroup.addAll(selectedPhotoGroup);
+            for (int i = 0; i<selectedPhotoGroup.size(); i++){
+                String path = selectedPhotoGroup.get(i).getPath();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+
+                Mat mat = new Mat();
+                Utils.bitmapToMat(bitmap, mat);
+
+                ORB detector = ORB.create();
+                Mat descriptor = new Mat();
+                detector.detectAndCompute(mat, new Mat(), new MatOfKeyPoint(), descriptor);
+                recommendPhotoClass.descRcmdArrayList.add(descriptor);
+            }
             setBitmapArrayList(photoGroup);
 
             if(unselectedPhotoGroup != null){
@@ -270,6 +307,108 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
 
             //Log.i(this.getClass().getName(),"데이터 전송 : 바뀌었다고 알림      =    ");
 
+        }
+    }
+    private class RecommandPhotoTask extends AsyncTask<Void, Void, Void> {
+
+        @SuppressLint("WrongThread")
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ArrayList<String> pathArrayList = new ArrayList<>();
+            for (int i =0; i<photoGroup.size(); i++){
+                String path = photoGroup.get(i).getPath();
+                pathArrayList.add(path);
+            }
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+
+            ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
+            for (int i =0; i<pathArrayList.size(); i++){
+                Bitmap bitmap = BitmapFactory.decodeFile(pathArrayList.get(i), options);
+                bitmapArrayList.add(bitmap);
+            }
+
+            ArrayList<Mat> matArrayList = new ArrayList<>();
+            for (int i = 0; i < bitmapArrayList.size(); i++){
+                Mat mat = new Mat();
+                Utils.bitmapToMat(bitmapArrayList.get(i), mat);
+                matArrayList.add(mat);
+            }
+
+            ORB detector = ORB.create();
+            MatOfKeyPoint mainKeyPoint = new MatOfKeyPoint();
+            Mat mainDescriptor = new Mat();
+            int max = -1;
+            Mat maxDescriptor = new Mat();
+            maxDescriptor = null;
+            detector.detectAndCompute(matArrayList.get(0), new Mat(), mainKeyPoint, mainDescriptor);
+            int recommendPhotoListSize = recommendPhotoClass.descRcmdArrayList.size();
+            if(recommendPhotoListSize > 0){
+                for (int i = 0; i<recommendPhotoListSize; i++) {
+                    Mat subDescriptor = recommendPhotoClass.descRcmdArrayList.get(i);
+                    if (mainDescriptor.isContinuous() && subDescriptor.isContinuous()) {
+                        DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);
+
+                        MatOfDMatch matches = new MatOfDMatch();
+                        matcher.match(mainDescriptor, subDescriptor, matches);
+
+                        List<DMatch> dMatchList = matches.toList();
+                        LinkedList<DMatch> good_matches = new LinkedList<DMatch>();
+                        for (int j = 0; j < dMatchList.size(); j++) {
+                            if (dMatchList.get(j).distance <= 40) {
+                                good_matches.add(dMatchList.get(j));
+                            }
+                        }
+                        if (good_matches.size() > max) {
+                            maxDescriptor = subDescriptor.clone();
+                        }
+                    }
+                }
+
+            } else {
+                SelectPhotoActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getBaseContext(), "추천 리스트 정보가 없습니다!!", Toast.LENGTH_LONG).show();
+                        // 추천 리스트 정보 없음
+                    }
+                });
+
+            }
+            if (maxDescriptor != null){
+                int recommend = -1;
+                max = -1;
+                for (int i = 0; i<matArrayList.size(); i++){
+                    detector.detectAndCompute(matArrayList.get(i), new Mat(), mainKeyPoint, mainDescriptor);
+                    if (mainDescriptor.isContinuous() && maxDescriptor.isContinuous()){
+                        DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);
+
+                        MatOfDMatch matches = new MatOfDMatch();
+                        matcher.match(mainDescriptor, maxDescriptor, matches);
+
+                        List<DMatch> dMatchList = matches.toList();
+                        LinkedList<DMatch> good_matches = new LinkedList<DMatch>();
+                        for (int j = 0; j < dMatchList.size(); j++) {
+                            if (dMatchList.get(j).distance <= 40) {
+                                good_matches.add(dMatchList.get(j));
+                            }
+                        }
+                        if (good_matches.size() > max) {
+                            recommend = i;
+                        }
+                    }
+                }
+                SelectPhotoActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getBaseContext(), "추천을 완료하였습니다!", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                // 추천 리스트 정보 없음
+                new SetBigImageTask().execute(recommend);
+            }
+            return null;
         }
     }
 
