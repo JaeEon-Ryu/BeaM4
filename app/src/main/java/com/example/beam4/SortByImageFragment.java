@@ -86,7 +86,7 @@ public class SortByImageFragment extends Fragment {
         ArrayList<Mat> matArrayList = new ArrayList<Mat>();
         ArrayList<String> pathArrayList = new ArrayList<>();
         for (int i = 0; i < uriArrayList.size(); i++){
-            String path = getImagePathFromURI(uriArrayList.get(i));
+            String path = uriArrayList.get(i).getPath();
             pathArrayList.add(path);
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -200,7 +200,6 @@ public class SortByImageFragment extends Fragment {
                     if (mainDescriptor.isContinuous() == true && subDescriptor.isContinuous() == true ) {
                         // Matcher
                         DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);
-                        matcher.train();
 
                         MatOfDMatch matches = new MatOfDMatch();
                         matcher.match(mainDescriptor, subDescriptor, matches);
@@ -295,34 +294,34 @@ public class SortByImageFragment extends Fragment {
         return view;
     }
 
-    private Bitmap setBitmap(Uri uri) {
-        Bitmap bmp = null;
-        try {
-            bmp = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), uri);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 250, false);
-            int degree = RotateBmpClass.GetExifOrientation(uri.getPath());
-            Bitmap rotatedBitmap = RotateBmpClass.GetRotatedBitmap(scaledBitmap, degree);
-            bmp.recycle();
-            bmp = rotatedBitmap;
-            return bmp;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bmp;
-    }
+//    private Bitmap setBitmap(Uri uri) {
+//        Bitmap bmp = null;
+//        try {
+//            bmp = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), uri);
+//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 250, false);
+//            int degree = RotateBmpClass.GetExifOrientation(uri.getPath());
+//            Bitmap rotatedBitmap = RotateBmpClass.GetRotatedBitmap(scaledBitmap, degree);
+//            bmp.recycle();
+//            bmp = rotatedBitmap;
+//            return bmp;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return bmp;
+//    }
 
-    private String getImagePathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-
-        if(cursor == null){
-            return contentUri.getPath();
-        } else{
-            int idx = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String imgPath = cursor.getString(idx);
-            cursor.close();
-            return imgPath;
-        }
-    }
+//    private String getImagePathFromURI(Uri contentUri) {
+//        String[] proj = {MediaStore.Images.Media.DATA};
+//        Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+//
+//        if(cursor == null){
+//            return contentUri.getPath();
+//        } else{
+//            int idx = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            String imgPath = cursor.getString(idx);
+//            cursor.close();
+//            return imgPath;
+//        }
+//    }
 }
