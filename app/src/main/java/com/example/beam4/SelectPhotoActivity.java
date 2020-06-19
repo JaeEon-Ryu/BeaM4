@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -70,17 +70,21 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
         String dateTime = intent.getStringExtra("index");
         int indexFromSortByImageFragment = intent.getExtras().getInt("indexFromSortByImageFragment");
 
+        Log.i(this.getClass().getName(),"깃발 dateTime 상태 =   "+ dateTime);
         // 어디서 왔는지 구별하기 위한 요소
         if(dateTime != null){
             timeFlag = true;
+            imageFlag = false;
         }
         else{
             imageFlag = true;
+            timeFlag = false;
         }
 
-
+        Log.i(this.getClass().getName(),"깃발 timeFlag 상태 =   "+ timeFlag);
+        Log.i(this.getClass().getName(),"깃발 imageFlag 상태 =   "+ imageFlag);
         if(timeFlag){   // SortByTimeFragment 에서 넘어오 데이터들
-            if(dateTime.equals("시간 정보가 없습니다.")){
+            if(dateTime.equals("시간 정보 없음")){
                 String[] IndexArray = SortByTimeFragment.nullIndex.split(",");
                 for (int i = 0; i < IndexArray.length; i++) {
                     int idx = Integer.parseInt(IndexArray[i]);
@@ -101,11 +105,13 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
                     }
                 }
             }
-        } else if(indexFromSortByImageFragment != -1){ // SortByImage에서 넘어온 데이터들
-            ArrayList<Uri> uriArrayList = photoFileClass.openCVFileArrayList.get(indexFromSortByImageFragment);
-            for (int i = 0; i<uriArrayList.size(); i++){
-                photoGroup.add(uriArrayList.get(i));
-                checkedPhotoList.add(false);
+        } else{ // SortByImage에서 넘어온 데이터들
+            if(indexFromSortByImageFragment != -1){
+                ArrayList<Uri> uriArrayList = photoFileClass.openCVFileArrayList.get(indexFromSortByImageFragment);
+                for (int i = 0; i<uriArrayList.size(); i++){
+                    photoGroup.add(uriArrayList.get(i));
+                    checkedPhotoList.add(false);
+                }
             }
         }
 

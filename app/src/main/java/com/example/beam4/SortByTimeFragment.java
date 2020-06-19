@@ -45,6 +45,7 @@ public class SortByTimeFragment extends Fragment {
         // uri 정보 받아오기
         String dateTimeCurrent = "";
 
+        nullIndex = "";
         timeList.clear();
         if (photoFileClass.photoFileArrayList != null) {
             for (int idx = 0; idx < photoFileClass.photoFileArrayList.size(); idx++) { // photoFileClass.photoFileArrayList.size()
@@ -54,6 +55,8 @@ public class SortByTimeFragment extends Fragment {
                 try {
                     ExifInterface exif = new ExifInterface(photoFileClass.photoFileArrayList.get(idx).getPath());
                     dateTimeCurrent = exif.getAttribute(ExifInterface.TAG_DATETIME);
+                    Log.i(this.getClass().getName(),"깃발 dateTimeCurrent 상태 =   "+ dateTimeCurrent);
+
                     if (dateTimeCurrent != null) {
                         dateTimeCurrent = dateTimeCurrent.substring(0, 10);
                     }
@@ -63,6 +66,7 @@ public class SortByTimeFragment extends Fragment {
                 }
 
                 boolean addFlag = true;
+
                 if (dateTimeCurrent == null) {
                     if (nullIndex.isEmpty()){
                         nullIndex += idxString;
@@ -152,7 +156,7 @@ public class SortByTimeFragment extends Fragment {
                 int idxInt = Integer.parseInt(nullArray[i].toString());
                 timeDataImg[i] = bitmapArrayList.get(idxInt);
             }
-            timeData.add(new SortByTime("시간 정보가 없습니다.", timeDataImg[0], timeDataImg[1], timeDataImg[2],
+            timeData.add(new SortByTime("시간 정보 없음", timeDataImg[0], timeDataImg[1], timeDataImg[2],
                     timeDataImg[3], timeDataImg[4], plusOn));
         }
         //////////////////////////////////////////////////////
