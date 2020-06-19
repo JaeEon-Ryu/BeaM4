@@ -406,8 +406,9 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
                 });
 
                 // 추천 리스트 정보 없음
-                new SetBigImageTask().execute(recommend);
-                checkButton.setChecked(checkedPhotoList.get(recommend));
+                whatPhotoPosition = recommend;
+                new SetBigImageTask().execute(whatPhotoPosition);
+                checkButton.setChecked(checkedPhotoList.get(whatPhotoPosition));
             }
             return null;
         }
