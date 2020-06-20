@@ -143,10 +143,44 @@ public class TrashCanFragment extends Fragment {
 
             if (selectedPhotoGroup.size() > 0) {
                 for (int i = 0; i < selectedPhotoGroup.size(); i++) {
-                    File file = new File(selectedPhotoGroup.get(i).getPath());
+                    String path = selectedPhotoGroup.get(i).getPath();
+                    Log.i(this.getClass().getName(),"디버깅중  "+ selectedPhotoGroup.get(i).getPath());
+                    Log.i(this.getClass().getName(),"디버깅중  "+ path);
+
+                    File file = new File(path);
                     if(file.exists()) {
                         boolean isDelete = file.delete();
-                        if(isDelete) Log.e("file delete ?", String.valueOf(isDelete));
+                        if(isDelete) {
+                            Log.e("file delete ?", String.valueOf(isDelete));
+                            MediaScanner mediaScanner = new MediaScanner(getContext(), file);
+//                            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//
+//                            intent.setData(Uri.fromFile(file);
+//
+//                            sendBroadcast(intent);
+//                            Intent intent = new Intent();
+//                            intent.setAction();
+//                            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+//                            IntentSender(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path))
+//                            BroadcastReceiver reciver = new BroadcastReceiver() {
+//                                @Override
+//                                public void onReceive(Context context, Intent intent) {
+//                                    String action = intent.getAction();
+//                                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+//                                }
+//                            }
+//                            reciver.
+//                            Uri uri = null;
+//                            if (type == PublicVariable.MEDIA_TYPE_IMAGE) {
+//                                uri = Images.Media.EXTERNAL_CONTENT_URI;
+//                            } else {
+//                                uri = Video.Media.EXTERNAL_CONTENT_URI;
+//                            }
+//                            String selection = Images.Media.DATA + " = ?";
+//                            String[] selectionArgs = {path}; // 실제 파일의 경로
+//                            int count = resolver.delete(uri, selection, selectionArgs);
+//
+                         }
                     }
                 }
             }
@@ -159,9 +193,6 @@ public class TrashCanFragment extends Fragment {
                     checkedTrashList.add(false);
                 }
             }
-
-            //selected에 대해서 영구히 삭제하는 function 필요
-
             selectedPhotoGroup.clear();
             unselectedPhotoGroup.clear();
             return null;
