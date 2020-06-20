@@ -153,6 +153,9 @@ public class TrashCanFragment extends Fragment {
                         if(isDelete) {
                             Log.e("file delete ?", String.valueOf(isDelete));
                             MediaScanner mediaScanner = new MediaScanner(getContext(), file);
+                            // MediaScanner 추가하고 화면이 깜빡이는 원인모를 버그가 있어욜
+                            // MediaScanner 클래서 안에서 스캔이 완료되면 자동으로 멈추는걸로 알고 있는데
+                            // 그게 아니라 뭐가 계속 돌고 있는거 같기도 하고
 //                            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 //
 //                            intent.setData(Uri.fromFile(file);
