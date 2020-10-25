@@ -7,7 +7,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,14 +54,14 @@ public class SortByTimeFragment extends Fragment {
                 try {
                     ExifInterface exif = new ExifInterface(photoFileClass.photoFileArrayList.get(idx).getPath());
                     dateTimeCurrent = exif.getAttribute(ExifInterface.TAG_DATETIME);
-                    Log.i(this.getClass().getName(),"깃발 dateTimeCurrent 상태 =   "+ dateTimeCurrent);
+                    //Log.i(this.getClass().getName(),"깃발 dateTimeCurrent 상태 =   "+ dateTimeCurrent);
 
                     if (dateTimeCurrent != null) {
                         dateTimeCurrent = dateTimeCurrent.substring(0, 10);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.i(this.getClass().getName(), "dateTime = 에러");
+                    //Log.i(this.getClass().getName(), "dateTime = 에러");
                 }
 
                 boolean addFlag = true;

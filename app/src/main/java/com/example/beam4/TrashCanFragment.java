@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,14 +143,14 @@ public class TrashCanFragment extends Fragment {
             if (selectedPhotoGroup.size() > 0) {
                 for (int i = 0; i < selectedPhotoGroup.size(); i++) {
                     String path = selectedPhotoGroup.get(i).getPath();
-                    Log.i(this.getClass().getName(),"디버깅중  "+ selectedPhotoGroup.get(i).getPath());
-                    Log.i(this.getClass().getName(),"디버깅중  "+ path);
+                    //Log.i(this.getClass().getName(),"디버깅중  "+ selectedPhotoGroup.get(i).getPath());
+                    //Log.i(this.getClass().getName(),"디버깅중  "+ path);
 
                     File file = new File(path);
                     if(file.exists()) {
                         boolean isDelete = file.delete();
                         if(isDelete) {
-                            Log.e("file delete ?", String.valueOf(isDelete));
+                            //Log.e("file delete ?", String.valueOf(isDelete));
                             MediaScanner mediaScanner = new MediaScanner(getContext(), file);
                             // MediaScanner 추가하고 화면이 깜빡이는 원인모를 버그가 있어욜
                             // MediaScanner 클래서 안에서 스캔이 완료되면 자동으로 멈추는걸로 알고 있는데

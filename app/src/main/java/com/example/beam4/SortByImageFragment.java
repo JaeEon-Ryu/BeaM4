@@ -1,14 +1,11 @@
 package com.example.beam4;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +29,6 @@ import org.opencv.features2d.ORB;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,9 +44,9 @@ public class SortByImageFragment extends Fragment {
     static {
         System.loadLibrary("native-lib");
         if(!OpenCVLoader.initDebug()){
-            Log.d(TAG, "OpenCV is not loaded!");
+            //Log.d(TAG, "OpenCV is not loaded!");
         } else {
-            Log.d(TAG, "OpenCV is loaded!");
+            //Log.d(TAG, "OpenCV is loaded!");
         }
     }
 
@@ -109,9 +105,9 @@ public class SortByImageFragment extends Fragment {
             Mat firstMat = matArrayList.get(0);
             // 첫번재 mat의 uri를 resultUriArrayList에 넣음
             resultUriArrayList.add(uriArrayList.get(0));
-            Log.d("check the process","checking openCV matching is working");
+            //Log.d("check the process","checking openCV matching is working");
             for (int i = 1; i < matArrayList.size(); i++) {
-                Log.d("check the process","checking openCV matching is working " + i);
+                //Log.d("check the process","checking openCV matching is working " + i);
                 // matArrayList 1 ~ matArrayList.size 까지 비교하기
                 Mat comparedMat = matArrayList.get(i);
                 // 히스토그램 매칭 실행
@@ -196,7 +192,7 @@ public class SortByImageFragment extends Fragment {
 
                     detector1.detectAndCompute(firstMat, new Mat(), mainKeyPoint, mainDescriptor);
                     detector2.detectAndCompute(comparedMat, new Mat(), subKeyPoint, subDescriptor);
-                    Log.d("check descriptor", "onCreateView: " + mainDescriptor + "  " + subDescriptor);
+                    //Log.d("check descriptor", "onCreateView: " + mainDescriptor + "  " + subDescriptor);
                     if (mainDescriptor.isContinuous() == true && subDescriptor.isContinuous() == true ) {
                         // Matcher
                         DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);
@@ -226,25 +222,25 @@ public class SortByImageFragment extends Fragment {
                 }
                 // comparedMat.release();
             }
-            Log.d("check the process","checking openCV matching is done " );
+            //Log.d("check the process","checking openCV matching is done " );
             // matArrayList 초기화 및 notSameMatArrayList로 갱신
 
             matArrayList = notSameMatArrayList;
-            Log.d("check the process","checking resultUriArrayList "  + resultUriArrayList);
+            //Log.d("check the process","checking resultUriArrayList "  + resultUriArrayList);
             if(resultUriArrayList.size() >= 2){
                 resultArrayList.add(resultUriArrayList);
             }
-            Log.d("check the process","checking resultUriArrayList "  + resultArrayList);
+            //Log.d("check the process","checking resultUriArrayList "  + resultArrayList);
 
             uriArrayList = notGoodResultUriArrayList;
             firstMat.release();
         }
-        Log.d("check the process","checking resultArrayList "  + resultArrayList);
+        //Log.d("check the process","checking resultArrayList "  + resultArrayList);
 
         photoFileClass.openCVFileArrayList = resultArrayList;
         ArrayList<ArrayList<Uri>> imgUriArrayList;
         imgUriArrayList = photoFileClass.openCVFileArrayList;
-        Log.d(TAG, "check OpenCVFileArrayLsit: " + imgUriArrayList);
+        //Log.d(TAG, "check OpenCVFileArrayLsit: " + imgUriArrayList);
         Uri[] uriDataImg = new Uri[11];
         Drawable plusOn;
 

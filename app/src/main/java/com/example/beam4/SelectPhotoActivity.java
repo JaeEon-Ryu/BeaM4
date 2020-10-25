@@ -81,8 +81,8 @@ public class SelectPhotoActivity extends AppCompatActivity implements CompoundBu
             timeFlag = false;
         }
 
-        Log.i(this.getClass().getName(),"깃발 timeFlag 상태 =   "+ timeFlag);
-        Log.i(this.getClass().getName(),"깃발 imageFlag 상태 =   "+ imageFlag);
+        //Log.i(this.getClass().getName(),"깃발 timeFlag 상태 =   "+ timeFlag);
+        //Log.i(this.getClass().getName(),"깃발 imageFlag 상태 =   "+ imageFlag);
         if(timeFlag){   // SortByTimeFragment 에서 넘어오 데이터들
             if(dateTime.equals("시간 정보 없음")){
                 String[] IndexArray = SortByTimeFragment.nullIndex.split(",");
